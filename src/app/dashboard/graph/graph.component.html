@@ -1,3 +1,14 @@
-<div>
-  {{ data$ | async | json }}
+<div class="graph-container">
+  <div class="graph-header">
+    <span class="graph-expression">
+      Expression: {{ expression }}
+    </span>
+    <span>
+      <button (click)="removeTrackedExpression()">X</button>
+    </span>
+  </div>
+    
+  <div class="graph-log-entries">
+    {{ logEntries$ | async | json }}
+  </div>
 </div>

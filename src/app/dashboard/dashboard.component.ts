@@ -1,3 +1,4 @@
+import { Expression } from '@angular/compiler/src/output/output_ast';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
@@ -15,6 +16,10 @@ export class DashboardComponent {
 
   expression = '';
   expressionList$: Observable<string[]>;
+
+  trackByExpression(index: number, expression: string): any {
+    return expression;
+  }
 
   constructor(
     private _store: Store<AppState>,

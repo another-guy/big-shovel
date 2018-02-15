@@ -5,7 +5,7 @@
   </div>
 
   <app-graph
-    *ngFor="let expression of (expressionList$ | async)"
+    *ngFor="let expression of (expressionList$ | async); trackBy: trackByExpression"
     [expression]="expression"
   ></app-graph>
 </div>

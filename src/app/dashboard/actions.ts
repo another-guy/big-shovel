@@ -1,10 +1,12 @@
 import { Action } from '@ngrx/store';
 
+import { LogEntries } from './state';
+
 export const ADD_GRAPH = 'add-graph';
 export const LOAD_GRAPH_DATA = 'load-graph-data';
 export const GRAPH_DATA_LOADED = 'graph-data-loaded';
 
-type Expression = any; // TODO
+type Expression = string;
 
 export class AddGraph implements Action {
   readonly type = ADD_GRAPH;
@@ -18,7 +20,7 @@ export class LoadGraphData implements Action {
 
 export class GraphDataLoaded implements Action {
   readonly type = GRAPH_DATA_LOADED;
-  constructor(public expression: Expression, public data: any) {} // TODO any
+  constructor(public expression: Expression, public data: LogEntries) {} // TODO any
 }
 
 export type Actions =

@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
 
 import { AppState } from '../../app.reducers';
+import { LogEntries } from '../state';
 
 @Component({
   selector: 'app-graph',
@@ -11,14 +11,16 @@ import { AppState } from '../../app.reducers';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GraphComponent {
-  @Input() expression: any;
-  data$: any; // TODO
-
-  expressionList$: Observable<string[]>;
+  @Input() expression: string;
+  logEntries$: Store<LogEntries>;
 
   constructor(
     private _store: Store<AppState>,
   ) {
-    this.data$ = _store.select(state => state.dashboard.allLogs[this.expression]);
+    this.logEntries$ = _store.select(state => state.dashboard.allLogs[this.expression]);
+  }
+
+  removeTrackedExpression(): void {
+    // TODO ...
   }
 }

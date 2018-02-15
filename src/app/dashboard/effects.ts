@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
 
-import { AddGraph, GraphDataLoaded, ADD_GRAPH } from './actions';
+import { ADD_GRAPH, AddGraph, GraphDataLoaded } from './actions';
 
 @Injectable()
 export class Effects {
@@ -15,7 +15,7 @@ export class Effects {
     .concatMap(addGraph =>
         this._http
             .get(`http://localhost:3001/logs?id=${addGraph.expression}`)
-            .map(response => (new GraphDataLoaded(addGraph.expression, response)))
+            .map(logEntries => (new GraphDataLoaded(addGraph.expression, logEntries)))
     );
 
   constructor(
