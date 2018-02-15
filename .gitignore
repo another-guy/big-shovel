@@ -40,3 +40,7 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+big-shovel-fake-db.log
+big-shovel.log
+
