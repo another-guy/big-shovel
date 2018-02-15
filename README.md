@@ -1,5 +1,14 @@
 # `big-shovel`
 
+## Getting The Sources
+
+```sh
+git clone https://github.com/another-guy/big-shovel.git
+
+( cd service; npm install )
+( cd spa; npm install )
+```
+
 ## Demo Database Setup via MongoDB
 
 ### MongoDB Installation
