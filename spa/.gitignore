@@ -43,4 +43,4 @@ Thumbs.db
 
 big-shovel-fake-db.log
 big-shovel.log
-
+*.log
