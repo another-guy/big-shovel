@@ -1,0 +1,11 @@
+<div>
+  <div>
+    <input [(ngModel)]="expression">
+    <button (click)="addExpression()">Add Expression Graph</button>
+  </div>
+
+  <app-graph
+    *ngFor="let expression of (expressionList$ | async)"
+    [expression]="expression"
+  ></app-graph>
+</div>
