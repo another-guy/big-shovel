@@ -14,7 +14,7 @@ export class Effects {
     .ofType<AddGraph>(ADD_GRAPH)
     .concatMap(addGraph =>
         this._http
-            .get(`http://localhost:3001/logs?id=${addGraph.expression}`)
+            .get(`http://localhost:3003/mongo?q=${addGraph.expression}`)
             .map(logEntries => (new GraphDataLoaded(addGraph.expression, logEntries)))
     );
 
