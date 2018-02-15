@@ -1,0 +1,17 @@
+{
+  "name": "big-shovel-service",
+  "version": "0.0.1-alpha",
+  "description": "APIs for BigShovel SPA",
+  "main": "./dist/index.js",
+  "scripts": {
+    "test": "karma start",
+    "test:single-run": "karma start --single-run",
+    "tslint": "tslint -c ./.config/tslint.json 'src/**/*.ts' -t stylish",
+    "double-check": "npm run test:single-run && npm run tslint"
+  },
+  "keywords": [
+    "big-shovel"
+  ],
+  "author": "Igor Soloydenko",
+  "license": "MIT"
+}
