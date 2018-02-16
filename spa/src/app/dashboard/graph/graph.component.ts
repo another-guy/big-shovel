@@ -38,17 +38,18 @@ export class GraphComponent {
 
   private plot(logEntries: LogEntry[]): void {
     const svgWidth = 600;
-    const svgHeight = 300;
+    const svgHeight = 100;
 
     const hourlyGrouped = this.groupByHours(logEntries);
     const byHourEntryCounts = d3.keys(hourlyGrouped).map(prop => hourlyGrouped[prop].length);
-    const minTotal = d3.min(byHourEntryCounts);
-    const maxTotal = d3.max(byHourEntryCounts);
+
     const yScale = d3.scaleLinear()
-      .domain([ minTotal, maxTotal ])
+      .domain([ 0, d3.max(byHourEntryCounts) ])
       .range([ 0, svgHeight ]);
-    
-    
+    const yScaleReverse = d3.scaleLinear()
+      .domain(yScale.domain())
+      .range(yScale.range().reverse())
+
     const hourlyLogEntryCounts = [
       '00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11',
       '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23',
@@ -63,46 +64,50 @@ export class GraphComponent {
     const rootElement = this._viewContainerRef.element.nativeElement;
     
     const barPadding = 3;
+    const base = 15;
+
     const svg = d3.select(rootElement)
       .select('svg')
         .attr('width', svgWidth)
         .attr('height', svgHeight);
 
-    svg.selectAll('rect')
+    svg.selectAll('rect.error-segment')
       .data(hourlyLogEntryCounts)
       .enter()
       .append('rect')
+        .attr('class', 'error-segment')
         .attr('fill', count => `rgb(${ 256 - count.errors * 2 }, 0, 0)`)
         .attr('x', (_, index) => index * (svgWidth / hourlyLogEntryCounts.length - barPadding))
-        .attr('y', (count, _) => svgHeight - count.errors * 6)
+        .attr('y', (count, _) => svgHeight - yScale(count.errors) - base)
         .attr('width', 20)
-        .attr('height', count => count.errors * 6);
+        .attr('height', count => yScale(count.errors));
     
-    svg.selectAll('text')
+    svg.selectAll('text.errorBar')
       .data(hourlyLogEntryCounts)
       .enter()
       .append('text')
-        .attr('fill', 'white')
+        .attr('class', 'errorBar')
+        .attr('fill', 'red')
         .attr('x', (_, index) => 1.5 + index * (svgWidth / hourlyLogEntryCounts.length - barPadding))
-        .attr('y', count => 14 + svgHeight - (count.errors * 6))
-        .text(count => +count.errors);
+        .attr('y', count => svgHeight - yScale(count.errors) - 2 - base)
+        .text(count => +count.errors || '');
 
-    // const hoursSelection = d3
-    //   .select(rootElement)
-    //   .select('div')
-    //     .style('background-color', '#eee')
-    //   .selectAll('div')
-    //   .data(hourlyLogEntryCount)
-    //     .enter();
-      
-    // hoursSelection.append('div')
-    //   .attr('class', 'error-segment')
-    //   .style('height', count => `${(count.errors) * 2}px`)
-    //   .attr('title', count => `TOTAL: ${count.errors + count.infos} (ERROR: ${count.errors}, INFO: ${count.infos})`);
-    // hoursSelection.append('div')
-    //   .attr('class', 'info-segment')
-    //   .style('height', count => `${(count.infos) * 2}px`)
-    //   .attr('title', count => `TOTAL: ${count.errors + count.infos} (ERROR: ${count.errors}, INFO: ${count.infos})`);
+    svg.selectAll('text.subs')
+      .data(hourlyLogEntryCounts)
+      .enter()
+      .append('text')
+        .attr('class', 'subs')
+        .attr('fill', 'black')
+        .attr('x', (_, index) => 1.5 + index * (svgWidth / hourlyLogEntryCounts.length - barPadding))
+        .attr('y', count => svgHeight)
+        .text((_, index) => ('0' + index).slice(-2));
+
+    const yAxis = d3.axisRight(yScaleReverse).ticks(5);
+
+    svg.append('g')
+      .attr('class', 'axis')
+      .attr('transform', `translate(${ svgWidth - 25 }, ${ -base })`)
+      .call(yAxis);
   }
 
   private groupByHours(logEntries: LogEntry[]): { [_: string]: LogEntry[] } {

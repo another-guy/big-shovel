@@ -1,18 +1,23 @@
 .graph-container {
-  border: 1px solid black;
-  min-height: 150px;
+  display: inline-block;
+}
+.graph-header {
 }
 
-.error-segment {
-  display: inline-block;
-  width: 20px;
-  background-color: red;
-  border: 1px dotted silver;
+svg {
+  border: 1px solid silver;
+
+  margin: 5px;
+  padding: 10px;
 }
 
-.info-segment {
-  display: inline-block;
-  width: 20px;
-  background-color: yellow;
-  border: 1px dotted silver;
+.axis path,
+.axis line {
+  fill: none;
+  stroke: black;
+  shape-rendering: crispEdges;
+}
+.axis text {
+  font-family: sans-serif;
+  font-size: 11px;
 }
