@@ -2,3 +2,17 @@
   border: 1px solid black;
   min-height: 150px;
 }
+
+.error-segment {
+  display: inline-block;
+  width: 20px;
+  background-color: red;
+  border: 1px dotted silver;
+}
+
+.info-segment {
+  display: inline-block;
+  width: 20px;
+  background-color: yellow;
+  border: 1px dotted silver;
+}
