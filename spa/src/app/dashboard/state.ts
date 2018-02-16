@@ -1,8 +1,7 @@
-export interface LogEntries { // TODO
-}
+import { LogEntry } from "./models/log-entry";
 
 export interface State {
-  allLogs: { [expression: string]: LogEntries };
+  allLogs: { [logDbQueryRepresentation: string]: LogEntry[] };
 }
 
 export const initialState: State = {

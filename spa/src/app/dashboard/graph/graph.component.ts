@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Store } from '@ngrx/store';
 
 import { AppState } from '../../app.reducers';
-import { LogEntries } from '../state';
+import { LogEntry } from '../models/log-entry';
 
 @Component({
   selector: 'app-graph',
@@ -11,13 +11,18 @@ import { LogEntries } from '../state';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GraphComponent {
-  @Input() expression: string;
-  logEntries$: Store<LogEntries>;
+
+  trackByEtrackByLogEntryxpression(index: number, logEntry: LogEntry): string {
+    return logEntry._id;
+  }
+  
+  @Input() logDbQueryRepresentation: string;
+  logEntries$: Store<LogEntry[]>;
 
   constructor(
     private _store: Store<AppState>,
   ) {
-    this.logEntries$ = _store.select(state => state.dashboard.allLogs[this.expression]);
+    this.logEntries$ = _store.select(state => state.dashboard.allLogs[this.logDbQueryRepresentation]);
   }
 
   removeTrackedExpression(): void {

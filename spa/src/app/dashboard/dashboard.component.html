@@ -1,11 +1,12 @@
 <div>
   <div>
-    <input [(ngModel)]="expression">
+    Query: <input [(ngModel)]="queryString">
+    Sort: <input [(ngModel)]="sortOptionsString">
     <button (click)="addExpression()">Add Expression Graph</button>
   </div>
 
   <app-graph
-    *ngFor="let expression of (expressionList$ | async); trackBy: trackByExpression"
-    [expression]="expression"
+    *ngFor="let logDbQueryRepresentation of (logDbQueryRepresentationList$ | async); trackBy: trackByExpression"
+    [logDbQueryRepresentation]="logDbQueryRepresentation"
   ></app-graph>
 </div>

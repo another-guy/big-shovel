@@ -9,6 +9,8 @@
   </div>
     
   <div class="graph-log-entries">
-    {{ logEntries$ | async | json }}
+    <div *ngFor="let logEntry of (logEntries$ | async); trackBy: trackByLogEntry">
+      {{ logEntry | json }}
+    </div>
   </div>
 </div>

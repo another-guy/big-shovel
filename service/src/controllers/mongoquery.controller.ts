@@ -1,5 +1,7 @@
 import { Request, Response, Router } from 'express';
-import { MongoClient, Db } from 'mongodb';
+import { Db, MongoClient } from 'mongodb';
+
+import { parseObjectFromString } from '../mongo/query-string-parse';
 
 let database: Db;
 MongoClient
@@ -11,16 +13,18 @@ const router = Router();
 
 router
   .get('/', async (request: Request, response: Response) => {
-    const queryObject = JSON.parse(request.query.q);
+    const queryObject = parseObjectFromString(request.query.q);
+    const sortObject = parseObjectFromString(request.query.s) || { "payload.eventTimeStamp": 1 };
 
-    const foundEntreis = await database
+    let foundEntries = await database
       .collection('myLogCollection')
       .find(queryObject)
+      .sort(sortObject)
       .toArray();
 
-    console.info(`Request ${ JSON.stringify(queryObject) } results in ${ foundEntreis.length } entr${ foundEntreis.length === 1 ? 'y' : 'ies' }.`);
+    console.info(`Request ${ JSON.stringify(queryObject) } results in ${ foundEntries.length } entr${ foundEntries.length === 1 ? 'y' : 'ies' }.`);
 
-    response.status(200).send(foundEntreis);
+    response.status(200).send(foundEntries);
   })
 
 export const MongoQueryController: Router = router;

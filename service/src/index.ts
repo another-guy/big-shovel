@@ -1,3 +1,4 @@
+import { NextFunction, Request, Response } from 'express';
 import * as express from 'express';
 
 import { MongoQueryController } from './controllers/mongoquery.controller';
@@ -7,6 +8,10 @@ const port = (process.env.PORT || 3000) as number;
 const timestamp = new Date();
 
 express()
+  // Global error handler
+  .use((error: any, request: Request, response: Response, nextFunction: NextFunction) => {
+    response.status(500).render('error', error)
+  })
   // CORS
   .use((request, response, nextFunction) => {
     response.header("Access-Control-Allow-Origin", "*");
