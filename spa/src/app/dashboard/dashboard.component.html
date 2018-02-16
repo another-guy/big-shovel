@@ -8,5 +8,24 @@
   <app-graph
     *ngFor="let logDbQueryRepresentation of (logDbQueryRepresentationList$ | async); trackBy: trackByExpression"
     [logDbQueryRepresentation]="logDbQueryRepresentation"
+    [svgSize]="{ w: 600, h: 400 }"
+  ></app-graph>
+
+  <app-graph
+    *ngFor="let logDbQueryRepresentation of (logDbQueryRepresentationList$ | async); trackBy: trackByExpression"
+    [logDbQueryRepresentation]="logDbQueryRepresentation"
+    [svgSize]="{ w: 600, h: 100 }"
+  ></app-graph>
+
+  <app-graph
+    *ngFor="let logDbQueryRepresentation of (logDbQueryRepresentationList$ | async); trackBy: trackByExpression"
+    [logDbQueryRepresentation]="logDbQueryRepresentation"
+    [svgSize]="{ w: 600, h: 200 }"
+  ></app-graph>
+
+  <app-graph
+    *ngFor="let logDbQueryRepresentation of (logDbQueryRepresentationList$ | async); trackBy: trackByExpression"
+    [logDbQueryRepresentation]="logDbQueryRepresentation"
+    [svgSize]="{ w: 1000, h: 200 }"
   ></app-graph>
 </div>
