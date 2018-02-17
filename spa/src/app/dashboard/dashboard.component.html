@@ -9,23 +9,27 @@
     *ngFor="let logDbQueryRepresentation of (logDbQueryRepresentationList$ | async); trackBy: trackByExpression"
     [logDbQueryRepresentation]="logDbQueryRepresentation"
     [svgSize]="{ w: 600, h: 400 }"
+    [kind]="'spline'"
   ></app-graph>
 
-  <!-- <app-graph
+  <app-graph
     *ngFor="let logDbQueryRepresentation of (logDbQueryRepresentationList$ | async); trackBy: trackByExpression"
     [logDbQueryRepresentation]="logDbQueryRepresentation"
     [svgSize]="{ w: 600, h: 100 }"
+    [kind]="'spline'"
   ></app-graph>
 
   <app-graph
     *ngFor="let logDbQueryRepresentation of (logDbQueryRepresentationList$ | async); trackBy: trackByExpression"
     [logDbQueryRepresentation]="logDbQueryRepresentation"
     [svgSize]="{ w: 600, h: 200 }"
+    [kind]="'spline'"
   ></app-graph>
 
   <app-graph
     *ngFor="let logDbQueryRepresentation of (logDbQueryRepresentationList$ | async); trackBy: trackByExpression"
     [logDbQueryRepresentation]="logDbQueryRepresentation"
     [svgSize]="{ w: 1000, h: 200 }"
-  ></app-graph> -->
+    [kind]="'spline'"
+  ></app-graph>
 </div>

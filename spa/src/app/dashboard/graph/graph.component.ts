@@ -19,9 +19,11 @@ export class GraphComponent {
     return logEntry._id;
   }
   
+  @Input() kind: string = 'line';
   @Input() svgSize = { w: 600, h: 100, };
 
   @Input() logDbQueryRepresentation: string;
+
   logEntries$: Store<LogEntry[]>;
   totalLogEntryCount$: Observable<number>;
 
@@ -64,14 +66,11 @@ export class GraphComponent {
   }
 
   private plotSvg2(logEntries: LogEntry[]): void {
-    const rootElement = this._viewContainerRef.element.nativeElement;
 
     const dateAndHourlyGrouped = this.groupByHours(logEntries);
     const errors = Object.getOwnPropertyNames(dateAndHourlyGrouped).map(dateHour => dateAndHourlyGrouped[dateHour].filter(le => le.level === 'ERROR').length);
     const infos = Object.getOwnPropertyNames(dateAndHourlyGrouped).map(dateHour => dateAndHourlyGrouped[dateHour].filter(le => le.level === 'INFO').length);
     const totals = Object.getOwnPropertyNames(dateAndHourlyGrouped).map(dateHour => dateAndHourlyGrouped[dateHour].length);
-
-    const selectedMode: string = 'bar';
 
     const columns = [
       [ 'ERRORS', ...errors ],
@@ -88,7 +87,7 @@ export class GraphComponent {
     
     let data: c3.Data = null;
     let axis: c3.Axis = null;
-    switch (selectedMode) {
+    switch (this.kind) {
       case 'stacked-bar':
         data = { type: 'bar', columns, groups, colors };
         break;
@@ -111,11 +110,11 @@ export class GraphComponent {
         data = { type: 'bar', columns, colors };
         break;
       default:
-        throw new Error(`Unsupported graph mode ${selectedMode}`);
+        throw new Error(`Unsupported graph mode ${this.kind}`);
     }
 
     c3.generate({
-      bindto: '#svg2',
+      bindto: this._viewContainerRef.element.nativeElement.querySelector('div.svg-container'),
       size: {
         height: this.svgSize.h,
         width: this.svgSize.w,
