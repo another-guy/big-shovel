@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component, Input, ViewContainerRef, ViewEncapsulation } from '@angular/core';
 import { Store } from '@ngrx/store';
-import * as d3 from 'd3';
+import * as c3 from 'c3';
+import { Observable } from 'rxjs/Observable';
 
 import { AppState } from '../../app.reducers';
 import { LogEntry } from '../models/log-entry';
-import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'app-graph',
@@ -42,88 +42,15 @@ export class GraphComponent {
   }
 
   private plot(logEntries: LogEntry[]): void {
-
-    const rootElement = this._viewContainerRef.element.nativeElement;
-    
-    const barPadding = 3;
-    const base = 15;
-
-    const svgWidth = this.svgSize.w;
-    const svgHeight = this.svgSize.h;
-
-    const dateAndHourlyGrouped = this.groupByHours(logEntries);
-    const dateAndHourGroupCounts = d3.keys(dateAndHourlyGrouped).map(prop => dateAndHourlyGrouped[prop].length);
-
-    const yScale = d3.scaleLinear()
-      .domain([ 0, d3.max(dateAndHourGroupCounts) ])
-      .range([ 0, svgHeight - base * 2 ]);
-    const yScaleReverse = d3.scaleLinear()
-      .domain(yScale.domain())
-      .range(yScale.range().reverse());
-
-    const dateAndHourlyLogEntryCounts = d3.keys(dateAndHourlyGrouped)
-      .map(dateAndHour => {
-        const logEntriesForDateAndHour = dateAndHourlyGrouped[dateAndHour] || [];
-        return {
-          errors: logEntriesForDateAndHour.filter(logEntry => logEntry.level === 'ERROR').length,
-          infos: logEntriesForDateAndHour.filter(logEntry => logEntry.level === 'INFO').length,
-        }
-      });
-
-    const sumAll = (count: { errors: number, infos: number }) => count.errors + count.infos;
-
-    const svg = d3.select(rootElement)
-      .select('svg')
-        .attr('width', svgWidth)
-        .attr('height', svgHeight);
-
-    svg.selectAll('rect.error-segment')
-      .data(dateAndHourlyLogEntryCounts)
-      .enter()
-      .append('rect')
-        .attr('class', 'error-segment')
-        .attr('fill', count => `#ccc`)
-        .attr('x', (_, index) => index * (svgWidth / dateAndHourlyLogEntryCounts.length - barPadding))
-        .attr('y', (count, _) => svgHeight - yScale(sumAll(count)) - base)
-        .attr('width', 20)
-        .attr('height', count => yScale(sumAll(count)));
-    
-    svg.selectAll('text.errorBar')
-      .data(dateAndHourlyLogEntryCounts)
-      .enter()
-      .append('text')
-        .attr('class', 'errorBar')
-        .attr('fill', 'red')
-        .attr('x', (_, index) => 1.5 + index * (svgWidth / dateAndHourlyLogEntryCounts.length - barPadding))
-        .attr('y', count => svgHeight - yScale(sumAll(count)) - 2 - base)
-        .text(count => +sumAll(count) || '');
-
-    const keys = d3.keys(dateAndHourlyGrouped);
-    svg.selectAll('text.subs')
-      .data(keys)
-        .enter()
-      .append('text')
-          .attr('class', 'subs')
-        .attr('fill', 'black')
-        .attr('x', (_, index) => 1.5 + index * (svgWidth / dateAndHourlyLogEntryCounts.length - barPadding))
-          .attr('y', count => svgHeight)
-        .text((_, index) => keys[index]);
-
-
-    const yAxis = d3.axisRight(yScaleReverse).ticks(5);
-
-    svg.append('g')
-      .attr('class', 'axis')
-      .attr('transform', `translate(${ svgWidth - 25 }, ${ base })`)
-      .call(yAxis);
+    this.plotSvg2(logEntries);
   }
 
-  private groupByHours(logEntries: LogEntry[]): { [_: string]: LogEntry[] } {
-    const getPeriodKey = (logEntry: LogEntry): string => logEntry.time.split(':')[0];
+  private getPeriodKey(logEntry: LogEntry): string { return logEntry.time.split(':')[0]; }
 
+  private groupByHours(logEntries: LogEntry[]): { [_: string]: LogEntry[] } {
     return logEntries.reduce(
         (subresult, logEntry) => {
-          const periodKey = getPeriodKey(logEntry);
+          const periodKey = this.getPeriodKey(logEntry);
           const periodLogEntries = subresult[periodKey];
           if (periodLogEntries) {
             periodLogEntries.push(logEntry);
@@ -134,5 +61,74 @@ export class GraphComponent {
         },
         <{ [_: string]: LogEntry[] }>{}
       );
+  }
+
+  private plotSvg2(logEntries: LogEntry[]): void {
+    const rootElement = this._viewContainerRef.element.nativeElement;
+
+    const dateAndHourlyGrouped = this.groupByHours(logEntries);
+    const errors = Object.getOwnPropertyNames(dateAndHourlyGrouped).map(dateHour => dateAndHourlyGrouped[dateHour].filter(le => le.level === 'ERROR').length);
+    const infos = Object.getOwnPropertyNames(dateAndHourlyGrouped).map(dateHour => dateAndHourlyGrouped[dateHour].filter(le => le.level === 'INFO').length);
+    const totals = Object.getOwnPropertyNames(dateAndHourlyGrouped).map(dateHour => dateAndHourlyGrouped[dateHour].length);
+
+    const selectedMode: string = 'bar';
+
+    const columns = [
+      [ 'ERRORS', ...errors ],
+      [ 'INFOS', ...infos ],
+    ];
+    const groups = [
+      ['ERRORS', 'INFOS'],
+    ];
+    const areaTypes = { 'INFOS': 'area', 'ERRORS': 'area' };
+    const areaSplineTypes = { 'INFOS': 'area-spline', 'ERRORS': 'area-spline' };
+    const stepTypes = { 'INFOS': 'step', 'ERRORS': 'step' };
+    const colors = { 'INFOS': '#ccc', 'ERRORS': '#f00' };
+    const bar = { width: { ratio: 0.8 } };
+    
+    let data: c3.Data = null;
+    let axis: c3.Axis = null;
+    switch (selectedMode) {
+      case 'stacked-bar':
+        data = { type: 'bar', columns, groups, colors };
+        break;
+      case 'stacked-area':
+        data = { columns, groups, types: areaSplineTypes, colors };
+        break;
+      case 'area':
+        data = { columns, types: areaTypes, colors };
+        break;
+      case 'line':
+        data = { columns, colors };
+        break;
+      case 'spline':
+        data = { type: 'spline', columns, colors };
+        break;
+      case 'step':
+        data = { columns, types: stepTypes, colors };
+        break;
+      case 'bar':
+        data = { type: 'bar', columns, colors };
+        break;
+      default:
+        throw new Error(`Unsupported graph mode ${selectedMode}`);
+    }
+
+    c3.generate({
+      bindto: '#svg2',
+      size: {
+        height: this.svgSize.h,
+        width: this.svgSize.w,
+      },
+      data,
+      axis,
+      bar,
+      zoom: {
+        enabled: true,
+      },
+      subchart: {
+        show: true,
+      }
+    });
   }
 }
