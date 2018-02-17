@@ -5,31 +5,9 @@
     <button (click)="addExpression()">Add Expression Graph</button>
   </div>
 
-  <app-graph
-    *ngFor="let logDbQueryRepresentation of (logDbQueryRepresentationList$ | async); trackBy: trackByExpression"
-    [logDbQueryRepresentation]="logDbQueryRepresentation"
-    [svgSize]="{ w: 600, h: 400 }"
-    [kind]="'spline'"
-  ></app-graph>
+  <span *ngFor="let logDbQueryRepresentation of (logDbQueryRepresentationList$ | async); trackBy: trackByExpression">
+    <app-log-db-query-results [logDbQueryRepresentation]="logDbQueryRepresentation">
+    </app-log-db-query-results>
+  </span>
 
-  <app-graph
-    *ngFor="let logDbQueryRepresentation of (logDbQueryRepresentationList$ | async); trackBy: trackByExpression"
-    [logDbQueryRepresentation]="logDbQueryRepresentation"
-    [svgSize]="{ w: 600, h: 100 }"
-    [kind]="'spline'"
-  ></app-graph>
-
-  <app-graph
-    *ngFor="let logDbQueryRepresentation of (logDbQueryRepresentationList$ | async); trackBy: trackByExpression"
-    [logDbQueryRepresentation]="logDbQueryRepresentation"
-    [svgSize]="{ w: 600, h: 200 }"
-    [kind]="'spline'"
-  ></app-graph>
-
-  <app-graph
-    *ngFor="let logDbQueryRepresentation of (logDbQueryRepresentationList$ | async); trackBy: trackByExpression"
-    [logDbQueryRepresentation]="logDbQueryRepresentation"
-    [svgSize]="{ w: 1000, h: 200 }"
-    [kind]="'spline'"
-  ></app-graph>
 </div>

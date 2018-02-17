@@ -1,0 +1,5 @@
+<span>
+  <span *ngFor="let logEntry of (logEntries$ | async); trackBy: trackByLogEntry">
+    {{ logEntry | json }}
+  </span>
+</span>

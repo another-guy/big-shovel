@@ -5,6 +5,8 @@ import { Observable } from 'rxjs/Observable';
 
 import { AppState } from '../../app.reducers';
 import { LogEntry } from '../models/log-entry';
+import { AggregationKey } from '../models/log-entry-key-extractors';
+import { GraphC3ConfigHelper } from './graph-c3-config-helper';
 
 @Component({
   selector: 'app-graph',
@@ -20,7 +22,7 @@ export class GraphComponent {
   }
   
   @Input() kind: string = 'line';
-  @Input() svgSize = { w: 600, h: 100, };
+  @Input() svgSize = { width: 600, height: 100, };
 
   @Input() logDbQueryRepresentation: string;
 
@@ -36,7 +38,12 @@ export class GraphComponent {
   }
 
   ngOnInit(): void {
-    this.logEntries$.subscribe(logEntries => this.plot(logEntries));
+    this.logEntries$.subscribe(logEntries =>
+      this.plot(logEntries.map(logEntry => (
+        logEntry.time = logEntry.time.replace(' ', 'T'),   // TODO Fix that on logging side!!!
+        logEntry
+      )))
+    );
   }
 
   removeTrackedExpression(): void {
@@ -44,15 +51,34 @@ export class GraphComponent {
   }
 
   private plot(logEntries: LogEntry[]): void {
-    this.plotSvg2(logEntries);
+    const metric = AggregationKey.minuteMetric;
+
+    const groupedByPeriod = this.groupByPeriod(logEntries, metric.getKey);
+    const periodKeyList = Object.getOwnPropertyNames(groupedByPeriod);
+    const errors = periodKeyList.map(periodKey => groupedByPeriod[periodKey].filter(logEntry => logEntry.level === 'ERROR').length);
+    const infos = periodKeyList.map(periodKey => groupedByPeriod[periodKey].filter(logEntry => logEntry.level === 'INFO').length);
+    const totals = periodKeyList.map(periodKey => groupedByPeriod[periodKey].length);
+
+    const c3ConfigBase = new GraphC3ConfigHelper().getBaseConfigForTimeSeries(this.kind, metric, periodKeyList, errors, infos);
+
+    const _ = c3.generate({
+      ...c3ConfigBase,
+      bindto: this._viewContainerRef.element.nativeElement.querySelector('div.svg-container'),
+      size: this.svgSize,
+      zoom: { enabled: true },
+      subchart: { show: true },
+    });
   }
 
-  private getPeriodKey(logEntry: LogEntry): string { return logEntry.time.split(':')[0]; }
-
-  private groupByHours(logEntries: LogEntry[]): { [_: string]: LogEntry[] } {
+  // TODO Unit test
+  // TODO Add filler for missing periods (with empty values)
+  private groupByPeriod(
+    logEntries: LogEntry[],
+    getPeriodKey: (timestamp: string) => string,
+  ): { [_: string]: LogEntry[] } {
     return logEntries.reduce(
         (subresult, logEntry) => {
-          const periodKey = this.getPeriodKey(logEntry);
+          const periodKey = getPeriodKey(logEntry.time);
           const periodLogEntries = subresult[periodKey];
           if (periodLogEntries) {
             periodLogEntries.push(logEntry);
@@ -65,69 +91,4 @@ export class GraphComponent {
       );
   }
 
-  private plotSvg2(logEntries: LogEntry[]): void {
-
-    const dateAndHourlyGrouped = this.groupByHours(logEntries);
-    const errors = Object.getOwnPropertyNames(dateAndHourlyGrouped).map(dateHour => dateAndHourlyGrouped[dateHour].filter(le => le.level === 'ERROR').length);
-    const infos = Object.getOwnPropertyNames(dateAndHourlyGrouped).map(dateHour => dateAndHourlyGrouped[dateHour].filter(le => le.level === 'INFO').length);
-    const totals = Object.getOwnPropertyNames(dateAndHourlyGrouped).map(dateHour => dateAndHourlyGrouped[dateHour].length);
-
-    const columns = [
-      [ 'ERRORS', ...errors ],
-      [ 'INFOS', ...infos ],
-    ];
-    const groups = [
-      ['ERRORS', 'INFOS'],
-    ];
-    const areaTypes = { 'INFOS': 'area', 'ERRORS': 'area' };
-    const areaSplineTypes = { 'INFOS': 'area-spline', 'ERRORS': 'area-spline' };
-    const stepTypes = { 'INFOS': 'step', 'ERRORS': 'step' };
-    const colors = { 'INFOS': '#ccc', 'ERRORS': '#f00' };
-    const bar = { width: { ratio: 0.8 } };
-    
-    let data: c3.Data = null;
-    let axis: c3.Axis = null;
-    switch (this.kind) {
-      case 'stacked-bar':
-        data = { type: 'bar', columns, groups, colors };
-        break;
-      case 'stacked-area':
-        data = { columns, groups, types: areaSplineTypes, colors };
-        break;
-      case 'area':
-        data = { columns, types: areaTypes, colors };
-        break;
-      case 'line':
-        data = { columns, colors };
-        break;
-      case 'spline':
-        data = { type: 'spline', columns, colors };
-        break;
-      case 'step':
-        data = { columns, types: stepTypes, colors };
-        break;
-      case 'bar':
-        data = { type: 'bar', columns, colors };
-        break;
-      default:
-        throw new Error(`Unsupported graph mode ${this.kind}`);
-    }
-
-    c3.generate({
-      bindto: this._viewContainerRef.element.nativeElement.querySelector('div.svg-container'),
-      size: {
-        height: this.svgSize.h,
-        width: this.svgSize.w,
-      },
-      data,
-      axis,
-      bar,
-      zoom: {
-        enabled: true,
-      },
-      subchart: {
-        show: true,
-      }
-    });
-  }
 }

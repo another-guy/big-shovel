@@ -1,0 +1,11 @@
+<span>
+  <app-graph
+    [logDbQueryRepresentation]="logDbQueryRepresentation"
+    [svgSize]="{ width: 1000, height: 400 }"
+    [kind]="'area'"
+  ></app-graph>
+
+  <app-log-entry-list
+    [logDbQueryRepresentation]="logDbQueryRepresentation"
+  ></app-log-entry-list>
+</span>
