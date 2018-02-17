@@ -1,16 +1,19 @@
 <div class="graph-container">
   <div class="graph-header">
     <span class="graph-expression">
-      Expression: {{ expression }}
+      Chart for {{ logDbQueryRepresentation }}. Total log entry count: {{ totalLogEntryCount$ | async }}
     </span>
     <span>
       <button (click)="removeTrackedExpression()">X</button>
     </span>
   </div>
+
+  <div class="svg-container"></div>
     
-  <div class="graph-log-entries">
+  <!-- <div class="graph-log-entries">
     <div *ngFor="let logEntry of (logEntries$ | async); trackBy: trackByLogEntry">
       {{ logEntry | json }}
     </div>
-  </div>
+  </div> -->
+  
 </div>

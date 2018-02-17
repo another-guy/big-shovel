@@ -33,6 +33,10 @@ export class DashboardComponent {
     this.logDbQueryRepresentationList$ = _store.select(state => Object.getOwnPropertyNames(state.dashboard.allLogs));
   }
 
+  ngOnInit() {
+    this.addExpression(); // TODO <---- TEMPORARY
+  }
+
   private dispatch(action: Actions): void {
     this._store.dispatch(action);
   }

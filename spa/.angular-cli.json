@@ -19,6 +19,7 @@
       "testTsconfig": "tsconfig.spec.json",
       "prefix": "app",
       "styles": [
+        "../node_modules/c3/c3.css",
         "styles.css"
       ],
       "scripts": [],
