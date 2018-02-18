@@ -1,0 +1,5 @@
+<select [(ngModel)]="nonPublicValue">
+  <option *ngFor="let chartType of CHART_TYPES" [ngValue]="chartType">
+    {{ chartType }}
+  </option>
+</select>

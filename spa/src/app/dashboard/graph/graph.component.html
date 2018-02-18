@@ -8,8 +8,13 @@
     </span>
   </div>
 
+  <div class="graph-controls">
+    <app-graph-options [logDbQueryRepresentation]="logDbQueryRepresentation"></app-graph-options>
+  </div>
+
   <div class="svg-container"></div>
     
+  <!-- TODO remove PROPERLY -->
   <!-- <div class="graph-log-entries">
     <div *ngFor="let logEntry of (logEntries$ | async); trackBy: trackByLogEntry">
       {{ logEntry | json }}

@@ -1,0 +1,8 @@
+<span>
+  Show as <app-chart-type-selector [(value)]="chartType"></app-chart-type-selector>
+  Aggregate by <app-metric-type-selector [(value)]="metricType"></app-metric-type-selector>
+
+  Auto-update <input type="checkbox" [(ngModel)]="autoDispatchOnChange">
+
+  <button *ngIf="!autoDispatchOnChange" (click)="dispatch()">Update</button>
+</span>

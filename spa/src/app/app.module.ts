@@ -12,6 +12,9 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { GraphComponent } from './dashboard/graph/graph.component';
 import { LogDbQueryResultsComponent } from './dashboard/log-db-query-results/log-db-query-results.component';
 import { LogEntryListComponent } from './dashboard/log-entry-list/log-entry-list.component';
+import { ChartTypeSelectorComponent } from './dashboard/chart-type-selector/chart-type-selector.component';
+import { MetricTypeSelectorComponent } from './dashboard/metric-type-selector/metric-type-selector.component';
+import { GraphOptionsComponent } from './dashboard/graph-options/graph-options.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +23,9 @@ import { LogEntryListComponent } from './dashboard/log-entry-list/log-entry-list
     GraphComponent,
     LogDbQueryResultsComponent,
     LogEntryListComponent,
+    ChartTypeSelectorComponent,
+    MetricTypeSelectorComponent,
+    GraphOptionsComponent,
   ],
   imports: [
     BrowserModule,

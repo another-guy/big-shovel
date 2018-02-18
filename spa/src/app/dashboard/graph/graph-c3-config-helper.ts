@@ -1,14 +1,32 @@
-import { Metric } from '../models/log-entry-key-extractors';
+import { Metric } from '../models/metric-type';
+
+export const BAR = 'bar';
+export const LINE = 'line';
+export const SPLINE = 'spline';
+export const AREA = 'area';
+export const STEP = 'step';
+export const STACKED_BAR = 'stacked-bar';
+export const STACKED_AREA = 'stacked-area';
+
+export const CHART_TYPES = [
+  BAR,
+  LINE,
+  SPLINE,
+  AREA,
+  STEP,
+  STACKED_BAR,
+  STACKED_AREA,
+];
 
 export class GraphC3ConfigHelper {
 
   constructor() {};
 
   getBaseConfigForTimeSeries(
-    kind: string,
+    chartType: string,
     metric: Metric,
 
-    // Think about how to generalize these parameters
+    // TODO Think about how to generalize these parameters
     periodKeyList: string[],
     errors: number[],
     infos: number[],
@@ -28,26 +46,26 @@ export class GraphC3ConfigHelper {
 
     const commonData = {
       x: 'x',
-      xFormat: metric.parseFormat,
+      xFormat: metric.timestampParseFormat,
     };
 
     let data: c3.Data = null;
-    switch (kind) {
-      case 'stacked-bar': data = { ...commonData, type: 'bar', columns, groups, colors }; break;
-      case 'stacked-area': data = { ...commonData, columns, groups, types: areaSplineTypes, colors }; break;
-      case 'area': data = { ...commonData, columns, types: areaTypes, colors }; break;
-      case 'line': data = { ...commonData, columns, colors }; break;
-      case 'spline': data = { ...commonData, type: 'spline', columns, colors }; break;
-      case 'step': data = { ...commonData, columns, types: stepTypes, colors }; break;
-      case 'bar': data = { ...commonData, type: 'bar', columns, colors }; break;
-      default: throw new Error(`Unsupported graph mode '${kind}'`);
+    switch (chartType) {
+      case BAR: data = { ...commonData, type: 'bar', columns, colors }; break;
+      case LINE: data = { ...commonData, columns, colors }; break;
+      case SPLINE: data = { ...commonData, type: 'spline', columns, colors }; break;
+      case AREA: data = { ...commonData, columns, types: areaTypes, colors }; break;
+      case STEP: data = { ...commonData, columns, types: stepTypes, colors }; break;
+      case STACKED_BAR: data = { ...commonData, type: 'bar', columns, groups, colors }; break;
+      case STACKED_AREA: data = { ...commonData, columns, groups, types: areaSplineTypes, colors }; break;
+      default: throw new Error(`Unsupported graph mode '${chartType}'`);
     }
     
     const axis: c3.Axis = {
       x: {
         type: 'timeseries',
         tick: {
-          format: metric.displayFormat,
+          format: metric.timestampDisplayFormat,
         },
       },
     };
