@@ -2,7 +2,16 @@
   Show as <app-chart-type-selector [(value)]="chartType"></app-chart-type-selector>
   Aggregate by <app-metric-type-selector [(value)]="metricType"></app-metric-type-selector>
 
-  Auto-update <input type="checkbox" [(ngModel)]="autoDispatchOnChange">
+  Auto-refresh <mat-checkbox [(ngModel)]="autoDispatchOnChange"></mat-checkbox>
 
-  <button *ngIf="!autoDispatchOnChange" (click)="dispatch()">Update</button>
+  <button mat-raised-button *ngIf="!autoDispatchOnChange" title="Refresh" (click)="dispatch()"><mat-icon>refresh</mat-icon></button>
+
 </span>
+
+<!--
+  TODO
+// deeppurple-amber.css
+// indigo-pink.css
+// pink-bluegrey.css
+// purple-green.css
+-->

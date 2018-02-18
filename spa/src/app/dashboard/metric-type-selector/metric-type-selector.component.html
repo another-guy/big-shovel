@@ -1,5 +1,5 @@
-<select [compareWith]="byMetricId" [(ngModel)]="nonPublicValue">
-  <option *ngFor="let metricType of METRIC_TYPES" [ngValue]="metricType">
+<mat-select [compareWith]="byMetricId" [(ngModel)]="nonPublicValue">
+  <mat-option *ngFor="let metricType of METRIC_TYPES" [value]="metricType">
     {{ metricType.name }}
-  </option>
-</select>
+  </mat-option>
+</mat-select>

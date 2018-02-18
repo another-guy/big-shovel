@@ -4,7 +4,7 @@
       Chart for {{ logDbQueryRepresentation }}. Total log entry count: {{ totalLogEntryCount$ | async }}
     </span>
     <span>
-      <button (click)="removeTrackedExpression()">X</button>
+      <button mat-raised-button color="warn" title="Remove" (click)="removeTrackedExpression()"><mat-icon>clear</mat-icon></button>
     </span>
   </div>
 

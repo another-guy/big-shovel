@@ -1,8 +1,13 @@
 <div>
   <div>
-    Query: <input [(ngModel)]="queryString">
-    Sort: <input [(ngModel)]="sortOptionsString">
-    <button (click)="addExpression()">Add Expression Graph</button>
+    <mat-form-field>
+      <input matInput placeholder="Query" [(ngModel)]="queryString">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Sort" [(ngModel)]="sortOptionsString">
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" title="Add Graph" (click)="addExpression()"><mat-icon>add</mat-icon></button>
   </div>
 
   <span *ngFor="let logDbQueryRepresentation of (logDbQueryRepresentationList$ | async); trackBy: trackByExpression">

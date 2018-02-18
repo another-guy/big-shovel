@@ -1,5 +1,5 @@
-<select [(ngModel)]="nonPublicValue">
-  <option *ngFor="let chartType of CHART_TYPES" [ngValue]="chartType">
+<mat-select placeholder="Chart type" [(ngModel)]="nonPublicValue">
+  <mat-option *ngFor="let chartType of CHART_TYPES" [value]="chartType">
     {{ chartType }}
-  </option>
-</select>
+  </mat-option>
+</mat-select>
