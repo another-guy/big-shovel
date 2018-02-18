@@ -14,6 +14,7 @@ import { combineLatest } from 'rxjs/observable/combineLatest';
 import { Subscription } from 'rxjs/Subscription';
 
 import { AppState } from '../../app.reducers';
+import { RemoveGraph } from '../actions';
 import { GraphOptions } from '../models/graph-options';
 import { LogEntry } from '../models/log-entry';
 import { GraphC3ConfigHelper } from './graph-c3-config-helper';
@@ -46,18 +47,22 @@ export class GraphComponent implements OnInit, OnDestroy {
   ) {
     this.logEntries$ = _store.select(state => state.dashboard.allLogs[this.logDbQueryRepresentation]);
     this.graphOptions$ = _store.select(state => state.dashboard.allGraphOptions[this.logDbQueryRepresentation]);
-    this.totalLogEntryCount$ = this.logEntries$.map(logEntries => logEntries.length);
+    this.totalLogEntryCount$ = this.logEntries$.map(logEntries => logEntries && logEntries.length);
   }
 
   ngOnInit(): void {
-    this._plotSubscription = combineLatest(this.graphOptions$, this.logEntries$)
-      .subscribe(([graphOptions, logEntries]) => this.plot(
-        logEntries.map(logEntry => (
-          logEntry.time = logEntry.time.replace(' ', 'T'),   // TODO Fix that on logging side!!!
-          logEntry
-        )),
-        graphOptions,
-      ));
+    this._plotSubscription = combineLatest(this.logEntries$, this.graphOptions$)
+      .subscribe(([logEntries, graphOptions]) => {
+        if (!logEntries || !graphOptions) return;
+
+        this.plot(
+          logEntries.map(logEntry => (
+            logEntry.time = logEntry.time.replace(' ', 'T'),   // TODO Fix that on logging side!!!
+            logEntry
+          )),
+          graphOptions,
+        );
+      });
   }
   ngOnDestroy(): void {
     if (this._plotSubscription) {
@@ -67,7 +72,7 @@ export class GraphComponent implements OnInit, OnDestroy {
   }
 
   removeTrackedExpression(): void {
-    // TODO ...
+    this._store.dispatch(new RemoveGraph(this.logDbQueryRepresentation));
   }
 
   private plot(logEntries: LogEntry[], graphOptions: GraphOptions): void {

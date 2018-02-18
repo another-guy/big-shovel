@@ -7,6 +7,7 @@ import { LogEntry } from './models/log-entry';
 export const ADD_GRAPH = 'add-graph';
 export const GRAPH_DATA_LOADED = 'graph-data-loaded';
 export const UPDATE_GRAPH_OPTIONS = 'update-graph-options';
+export const REMOVE_GRAPH = 'remove-graph';
 
 export class AddGraph implements Action {
   readonly type = ADD_GRAPH;
@@ -23,7 +24,13 @@ export class UpdateGraphOptions implements Action {
   constructor(public logDbQueryRepresentation: string, public options: GraphOptions) { }
 }
 
+export class RemoveGraph implements Action {
+  readonly type = REMOVE_GRAPH;
+  constructor(public logDbQueryRepresentation: string) { }
+}
+
 export type Actions =
   AddGraph |
   GraphDataLoaded |
-  UpdateGraphOptions;
+  UpdateGraphOptions |
+  RemoveGraph;
