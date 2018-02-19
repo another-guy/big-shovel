@@ -1,11 +1,14 @@
 import {
   MatButtonModule,
+  MatCardModule,
   MatCheckboxModule,
   MatCommonModule,
   MatFormFieldModule,
   MatIconModule,
   MatInputModule,
   MatSelectModule,
+  MatTabsModule,
+  MatToolbarModule,
 } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -22,4 +25,8 @@ export const MaterialModules = [
   MatInputModule,
   MatIconModule,
   MatSelectModule,
+  MatToolbarModule,
+
+  MatCardModule,
+  MatTabsModule,
 ];
