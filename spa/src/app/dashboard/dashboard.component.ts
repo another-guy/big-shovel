@@ -19,8 +19,8 @@ const DEFAULT_SORT = SORT_BY_TIME_CHRONOLOGICALLY;
 })
 export class DashboardComponent {
 
-  queryString = DEFAULT_EXPRESSION;
-  sortOptionsString = DEFAULT_SORT;
+  queryString: string;
+  sortOptionsString: string;
   logDbQueryRepresentationList$: Observable<string[]>;
 
   trackByExpression(index: number, expression: string): string {
@@ -30,6 +30,7 @@ export class DashboardComponent {
   constructor(
     private _store: Store<AppState>,
   ) {
+    this.clearExpression();
     this.logDbQueryRepresentationList$ = _store.select(state => Object.getOwnPropertyNames(state.dashboard.allLogs));
   }
 
@@ -41,9 +42,13 @@ export class DashboardComponent {
     this._store.dispatch(action);
   }
 
-  addExpression(): void {
-    this.dispatch(new AddGraph({ query: this.queryString, sortOptions: this.sortOptionsString }));
+  clearExpression(): void {
     this.queryString = DEFAULT_EXPRESSION;
     this.sortOptionsString = SORT_BY_TIME_CHRONOLOGICALLY;
+  }
+
+  addExpression(): void {
+    this.dispatch(new AddGraph({ query: this.queryString, sortOptions: this.sortOptionsString }));
+    this.clearExpression();
   }
 }

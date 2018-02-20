@@ -1,24 +1,31 @@
-<div class="graph-container">
-  <div class="graph-header">
-    <span class="graph-expression">
-      Chart for {{ logDbQueryRepresentation }}. Total log entry count: {{ totalLogEntryCount$ | async }}
-    </span>
+<span>
+  <mat-toolbar>
+    <span class="code">{{ logDbQueryRepresentation }}</span>
+    <span class="spacer"></span>
+    <span>Total record count: {{ totalLogEntryCount$ | async }}</span>
+    <span class="spacer"></span>
     <span>
-      <button mat-raised-button color="warn" title="Remove" (click)="removeTrackedExpression()"><mat-icon>clear</mat-icon></button>
+      <button mat-icon-button mat-raised-button title="Expand/Collapse" (click)="collapsed = !collapsed">
+        <mat-icon *ngIf="collapsed">keyboard_arrow_down</mat-icon>
+        <mat-icon *ngIf="!collapsed">keyboard_arrow_up</mat-icon>
+      </button>
+      <button mat-icon-button mat-raised-button color="warn" title="Remove" (click)="removeTrackedExpression()"><mat-icon>clear</mat-icon></button>
     </span>
-  </div>
+  </mat-toolbar>
 
-  <div class="graph-controls">
-    <app-graph-options [logDbQueryRepresentation]="logDbQueryRepresentation"></app-graph-options>
-  </div>
+  <mat-card [style.display]="collapsed?'none':''">
+    <mat-card-content>
+      <app-graph-options [logDbQueryRepresentation]="logDbQueryRepresentation"></app-graph-options>
+    </mat-card-content>
+  </mat-card>
 
-  <div class="svg-container"></div>
+  <mat-card [style.display]="collapsed?'none':''">
+    <mat-card-content>
+      <div class="svg-container"></div>
     
-  <!-- TODO remove PROPERLY -->
-  <!-- <div class="graph-log-entries">
-    <div *ngFor="let logEntry of (logEntries$ | async); trackBy: trackByLogEntry">
-      {{ logEntry | json }}
-    </div>
-  </div> -->
-  
-</div>
+      <app-log-entry-list
+        [logDbQueryRepresentation]="logDbQueryRepresentation"
+      ></app-log-entry-list>
+    </mat-card-content>
+  </mat-card>
+</span>

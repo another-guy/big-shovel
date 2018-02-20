@@ -1,7 +1,32 @@
 @import "~@angular/material/prebuilt-themes/deeppurple-amber.css";
 
+/* Patch Material design */
+
 mat-select.mat-select,
 div.mat-select-trigger,
 div.mat-select-value {
   display: inline;
+}
+
+mat-icon {
+  vertical-align: middle;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+button.mat-icon-button {
+  border-radius: 15%;
+}
+
+/* Custom CSS */
+
+.small-group {
+  padding: 0 10px;
+}
+
+.code {
+  font-family: Cosolas, Courier New, Courier, monospace;
+  font-weight: bold;
 }

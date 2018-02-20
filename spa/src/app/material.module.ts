@@ -1,12 +1,12 @@
 import {
   MatButtonModule,
   MatCardModule,
-  MatCheckboxModule,
   MatCommonModule,
   MatFormFieldModule,
   MatIconModule,
   MatInputModule,
   MatSelectModule,
+  MatSlideToggleModule,
   MatTabsModule,
   MatToolbarModule,
 } from '@angular/material';
@@ -21,7 +21,6 @@ export const MaterialModules = [
   MatFormFieldModule,
 
   MatButtonModule,
-  MatCheckboxModule,
   MatInputModule,
   MatIconModule,
   MatSelectModule,
@@ -29,4 +28,5 @@ export const MaterialModules = [
 
   MatCardModule,
   MatTabsModule,
+  MatSlideToggleModule,
 ];

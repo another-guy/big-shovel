@@ -36,6 +36,8 @@ export class GraphComponent implements OnInit, OnDestroy {
 
   @Input() logDbQueryRepresentation: string;
 
+  collapsed: boolean = false;
+
   logEntries$: Store<LogEntry[]>;
   graphOptions$: Store<GraphOptions>;
   totalLogEntryCount$: Observable<number>;

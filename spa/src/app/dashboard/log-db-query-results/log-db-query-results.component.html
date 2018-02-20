@@ -1,10 +1,8 @@
-<span>
-  <app-graph
-    [logDbQueryRepresentation]="logDbQueryRepresentation"
-    [svgSize]="{ width: 1000, height: 400 }"
-  ></app-graph>
-
-  <app-log-entry-list
-    [logDbQueryRepresentation]="logDbQueryRepresentation"
-  ></app-log-entry-list>
-</span>
+<mat-card>
+  <mat-card-content>
+    <app-graph
+      [logDbQueryRepresentation]="logDbQueryRepresentation"
+      [svgSize]="{ width: 1000, height: 400 }"
+    ></app-graph>
+  </mat-card-content>
+</mat-card>
