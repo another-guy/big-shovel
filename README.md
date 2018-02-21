@@ -102,13 +102,14 @@ echo "" > ~/.dbshell && chmod 0 ~/.dbshell
 ```sh
 npm install -g hotel
 
-# from `spa` directory
-hotel add 'json-server -p 3001 logs-fake-db.json' -p 3001 -n big-shovel-fake-db -o big-shovel-fake-db.log
-
 hotel add 'ng serve' -p 4200 -n big-shovel-spa -o big-shovel.log
 
 hotel add 'mongod --dbpath C:\temp\my-logs-test-db' -p 27017 -n big-shovel-mongo -o big-shovel-mongo.log
 
 # from `service` directory
 hotel add 'node ./node_modules/typescript/bin/tsc && node ./dist/index.js -p 3003' -p 3003 -n big-shovel-service -o big-shovel-service.log
+
+# OUTDATED. logs-fake-db.json is not maintained.
+# from `spa` directory
+hotel add 'json-server -p 3001 logs-fake-db.json' -p 3001 -n big-shovel-fake-db -o big-shovel-fake-db.log
 ```
