@@ -1,9 +1,10 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs/Observable';
 
 import { AppState } from '../../app.reducers';
-import { UpdateGraphOptions } from '../actions';
-import { hourlyMetric, Metric } from '../models/metric-type';
+import { RedrawGraph, UpdateGraphOptions } from '../actions';
+import { Metric } from '../models/metric-type';
 
 @Component({
   selector: 'app-graph-options',
@@ -15,37 +16,34 @@ export class GraphOptionsComponent {
 
   @Input() logDbQueryRepresentation: string;
 
-  autoDispatchOnChange: boolean = true;
+  autoRedrawGraph: boolean = true;
 
-  private _chartType: string = 'line';
-  get chartType(): string {
-    return this._chartType;
-  }
-  set chartType(newValue: string) {
-    this._chartType = newValue;
-    this.tryEmit();
+  chartType$: Observable<string>;
+  setChartType(newValue: string) {
+    this.dispatch(newValue, undefined);
   }
   
-  private _metricType: Metric = hourlyMetric;
-  get metricType(): Metric {
-    return this._metricType;
+  metricType$: Observable<Metric>;
+  setMetricType(newValue: Metric) {
+    this.dispatch(undefined, newValue);
   }
-  set metricType(newValue: Metric) {
-    this._metricType = newValue;
-    this.tryEmit();
+
+  requestRedrawGraph(): void {
+    this._store.dispatch(new RedrawGraph(this.logDbQueryRepresentation));
   }
 
   constructor(
     private _store: Store<AppState>,
-  ) { }
-
-  private tryEmit() {
-    if (this.autoDispatchOnChange) {
-      this.dispatch();
-    }
+  ) {
+    const groupOptions = this._store.select(state => state.dashboard.allGraphOptions[this.logDbQueryRepresentation]);
+    this.chartType$ = groupOptions.select(options => options.chartType);
+    this.metricType$ = groupOptions.select(options => options.metricType);
   }
 
-  dispatch(): void {
-    this._store.dispatch(new UpdateGraphOptions(this.logDbQueryRepresentation, { chartType: this.chartType, metricType: this.metricType }));
+  dispatch(chartType: string, metricType: Metric): void {
+    this._store.dispatch(new UpdateGraphOptions(this.logDbQueryRepresentation, { chartType, metricType }));
+    if (this.autoRedrawGraph) {
+      this.requestRedrawGraph();
+    }
   }
 }

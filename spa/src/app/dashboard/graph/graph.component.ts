@@ -1,3 +1,6 @@
+import 'rxjs/add/operator/filter';
+import 'rxjs/add/operator/withLatestFrom';
+
 import {
   ChangeDetectionStrategy,
   Component,
@@ -7,14 +10,14 @@ import {
   ViewContainerRef,
   ViewEncapsulation,
 } from '@angular/core';
+import { Actions } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import * as c3 from 'c3';
 import { Observable } from 'rxjs/Observable';
-import { combineLatest } from 'rxjs/observable/combineLatest';
 import { Subscription } from 'rxjs/Subscription';
 
 import { AppState } from '../../app.reducers';
-import { RemoveGraph } from '../actions';
+import { REDRAW_GRAPH, RedrawGraph, RemoveGraph } from '../actions';
 import { GraphOptions } from '../models/graph-options';
 import { LogEntry } from '../models/log-entry';
 import { GraphC3ConfigHelper } from './graph-c3-config-helper';
@@ -42,21 +45,26 @@ export class GraphComponent implements OnInit, OnDestroy {
   graphOptions$: Store<GraphOptions>;
   totalLogEntryCount$: Observable<number>;
 
+  graphRedrawRequests$ = this._actions
+    .ofType<RedrawGraph>(REDRAW_GRAPH)
+    .filter(action => action.logDbQueryRepresentation === this.logDbQueryRepresentation);
+
   private _plotSubscription: Subscription;
   constructor(
     private _store: Store<AppState>,
+    private _actions: Actions,
     private _viewContainerRef: ViewContainerRef,
   ) {
     this.logEntries$ = _store.select(state => state.dashboard.allLogs[this.logDbQueryRepresentation]);
     this.graphOptions$ = _store.select(state => state.dashboard.allGraphOptions[this.logDbQueryRepresentation]);
+
     this.totalLogEntryCount$ = this.logEntries$.map(logEntries => logEntries && logEntries.length);
   }
 
   ngOnInit(): void {
-    this._plotSubscription = combineLatest(this.logEntries$, this.graphOptions$)
-      .subscribe(([logEntries, graphOptions]) => {
+    this._plotSubscription = this.graphRedrawRequests$
+      .withLatestFrom(this.logEntries$, this.graphOptions$, (request, logEntries, graphOptions) => {
         if (!logEntries || !graphOptions) return;
-
         this.plot(
           logEntries.map(logEntry => (
             logEntry.time = logEntry.time.replace(' ', 'T'),   // TODO Fix that on logging side!!!
@@ -64,7 +72,8 @@ export class GraphComponent implements OnInit, OnDestroy {
           )),
           graphOptions,
         );
-      });
+      })
+      .subscribe();
   }
   ngOnDestroy(): void {
     if (this._plotSubscription) {
@@ -78,6 +87,7 @@ export class GraphComponent implements OnInit, OnDestroy {
   }
 
   private plot(logEntries: LogEntry[], graphOptions: GraphOptions): void {
+
     const groupedByPeriod = this.groupByPeriod(logEntries, graphOptions.metricType.getKey);
     const periodKeyList = Object.getOwnPropertyNames(groupedByPeriod);
     const errors = periodKeyList.map(periodKey => groupedByPeriod[periodKey].filter(logEntry => logEntry.level === 'ERROR').length);

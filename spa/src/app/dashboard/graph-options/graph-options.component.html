@@ -1,12 +1,20 @@
 <div>
   <span class="small-group">
-    Show as <app-chart-type-selector [(value)]="chartType"></app-chart-type-selector>
+    Show as
+    <app-chart-type-selector
+      [value]="chartType$ | async"
+      (valueChange)="setChartType($event)"
+    ></app-chart-type-selector>
   </span>
   <span class="small-group">
-    Aggregate by <app-metric-type-selector [(value)]="metricType"></app-metric-type-selector>
+    Aggregate by
+    <app-metric-type-selector
+      [value]="metricType$ | async"
+      (valueChange)="setMetricType($event)"
+    ></app-metric-type-selector>
   </span>
   <span class="small-group">
-    Refresh <span *ngIf="autoDispatchOnChange">automatically</span><span *ngIf="!autoDispatchOnChange">manually</span> <mat-slide-toggle [(ngModel)]="autoDispatchOnChange"></mat-slide-toggle>
-    <button mat-icon-button mat-raised-button *ngIf="!autoDispatchOnChange" title="Refresh" (click)="dispatch()"><mat-icon>refresh</mat-icon></button>
+    Refresh <span *ngIf="autoRedrawGraph">automatically</span><span *ngIf="!autoRedrawGraph">manually</span> <mat-slide-toggle [(ngModel)]="autoRedrawGraph"></mat-slide-toggle>
+    <button mat-icon-button mat-raised-button *ngIf="!autoRedrawGraph" title="Refresh" (click)="requestRedrawGraph()"><mat-icon>refresh</mat-icon></button>
   </span>
 </div>

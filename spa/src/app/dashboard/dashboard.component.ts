@@ -5,11 +5,8 @@ import { Observable } from 'rxjs/Observable';
 import { AppState } from '../app.reducers';
 import { Actions, AddGraph } from './actions';
 
-const ALL_EXPRESSION = '{}';
-const DEFAULT_EXPRESSION = ALL_EXPRESSION;
-
-const SORT_BY_TIME_CHRONOLOGICALLY = '{ "time": 1 }';
-const DEFAULT_SORT = SORT_BY_TIME_CHRONOLOGICALLY;
+const DEFAULT_EXPRESSION = '{}';
+const DEFAULT_SORT = '{}';
 
 @Component({
   selector: 'app-dashboard',
@@ -44,11 +41,10 @@ export class DashboardComponent {
 
   clearExpression(): void {
     this.queryString = DEFAULT_EXPRESSION;
-    this.sortOptionsString = SORT_BY_TIME_CHRONOLOGICALLY;
+    this.sortOptionsString = DEFAULT_EXPRESSION;
   }
 
   addExpression(): void {
     this.dispatch(new AddGraph({ query: this.queryString, sortOptions: this.sortOptionsString }));
-    this.clearExpression();
   }
 }

@@ -29,7 +29,17 @@ export function handleGraphDataLoaded(currentState: State, action: GraphDataLoad
 
 export function handleUpdateGraphOptions(currentState: State, action: UpdateGraphOptions): State {
   const allGraphOptions = { ...currentState.allGraphOptions };
-  allGraphOptions[action.logDbQueryRepresentation] = action.options;
+
+  const optionsBeforeEvent = allGraphOptions[action.logDbQueryRepresentation] || ({} as GraphOptions);
+  const newOptions = { ...optionsBeforeEvent };
+  Object
+    .getOwnPropertyNames(action.options)
+    .forEach(key => {
+      const proposedValue = action.options[key];
+      if (proposedValue !== undefined) newOptions[key] = proposedValue;
+    });
+
+  allGraphOptions[action.logDbQueryRepresentation] = newOptions;
 
   return { allLogs: currentState.allLogs, allGraphOptions: allGraphOptions };
 }

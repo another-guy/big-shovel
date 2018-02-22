@@ -8,6 +8,7 @@ export const ADD_GRAPH = 'add-graph';
 export const GRAPH_DATA_LOADED = 'graph-data-loaded';
 export const UPDATE_GRAPH_OPTIONS = 'update-graph-options';
 export const REMOVE_GRAPH = 'remove-graph';
+export const REDRAW_GRAPH = 'redraw-graph';
 
 export class AddGraph implements Action {
   readonly type = ADD_GRAPH;
@@ -21,7 +22,10 @@ export class GraphDataLoaded implements Action {
 
 export class UpdateGraphOptions implements Action {
   readonly type = UPDATE_GRAPH_OPTIONS;
-  constructor(public logDbQueryRepresentation: string, public options: GraphOptions) { }
+  constructor(
+    public logDbQueryRepresentation: string,
+    public options: GraphOptions,
+  ) { }
 }
 
 export class RemoveGraph implements Action {
@@ -29,8 +33,16 @@ export class RemoveGraph implements Action {
   constructor(public logDbQueryRepresentation: string) { }
 }
 
+export class RedrawGraph implements Action {
+  readonly type = REDRAW_GRAPH;
+  constructor(
+    public logDbQueryRepresentation: string,
+  ) { }
+}
+
 export type Actions =
   AddGraph |
   GraphDataLoaded |
   UpdateGraphOptions |
-  RemoveGraph;
+  RemoveGraph |
+  RedrawGraph;
