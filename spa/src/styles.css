@@ -26,7 +26,8 @@ button.mat-icon-button {
   padding: 0 10px;
 }
 
-.code {
+.code,
+textarea.code {
   font-family: Cosolas, Courier New, Courier, monospace;
   font-weight: bold;
 }

@@ -19,7 +19,7 @@ express()
     nextFunction();
   })
   // Add controllers
-  .use('/mongo', MongoQueryController)
+  .use('/logs', MongoQueryController)
   .use('/', (request, response) => { response.status(200).send('Up-n-running'); })
   // Start
   .listen(port, () => console.log(`Listening at http://localhost:${port}/ since ${timestamp.toLocaleString()} (Local Time)`));

@@ -2,19 +2,19 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 
-import { AppState } from '../app.reducers';
-import { Actions, AddGraph } from './actions';
+import { AppState } from '../../app.reducers';
+import { Actions, AddGraph } from '../actions';
 
 const DEFAULT_EXPRESSION = '{}';
 const DEFAULT_SORT = '{}';
 
 @Component({
-  selector: 'app-dashboard',
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css'],
+  selector: 'app-timeseries',
+  templateUrl: './timeseries.component.html',
+  styleUrls: ['./timeseries.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DashboardComponent {
+export class TimeseriesComponent {
 
   queryString: string;
   sortOptionsString: string;
@@ -29,10 +29,6 @@ export class DashboardComponent {
   ) {
     this.clearExpression();
     this.logDbQueryRepresentationList$ = _store.select(state => Object.getOwnPropertyNames(state.dashboard.allLogs));
-  }
-
-  ngOnInit() {
-    this.addExpression(); // TODO <---- TEMPORARY
   }
 
   private dispatch(action: Actions): void {

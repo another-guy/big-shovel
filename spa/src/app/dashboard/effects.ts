@@ -17,7 +17,7 @@ export class Effects {
     .ofType<AddGraph>(ADD_GRAPH)
     .concatMap(addGraph =>
         this._http
-            .get(`http://localhost:3003/mongo?${toStringRepresentation(addGraph.logDbQuery)}`)
+            .get(`http://localhost:3003/logs/timeseries?${toStringRepresentation(addGraph.logDbQuery)}`)
             .map(logEntries => (new GraphDataLoaded(addGraph.logDbQuery, <LogEntry[]>logEntries)))
     );
 

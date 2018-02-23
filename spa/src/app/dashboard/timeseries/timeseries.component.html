@@ -1,0 +1,20 @@
+<mat-card>
+  <a href="http://mongodb.github.io/node-mongodb-native/3.0/tutorials/collections/" target="_blank"><mat-icon>info_outline</mat-icon></a>
+
+  <mat-card-content>
+    <mat-form-field>
+      <input matInput placeholder="Query" [(ngModel)]="queryString">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Sort" [(ngModel)]="sortOptionsString">
+    </mat-form-field>
+
+    <button mat-icon-button mat-raised-button title="Clear" (click)="clearExpression()"><mat-icon>backspace</mat-icon></button>
+    <button mat-icon-button mat-raised-button color="primary" title="Add Graph" (click)="addExpression()"><mat-icon>add</mat-icon></button>
+  </mat-card-content>
+</mat-card>
+
+<span *ngFor="let logDbQueryRepresentation of (logDbQueryRepresentationList$ | async); trackBy: trackByExpression">
+  <app-log-db-query-results [logDbQueryRepresentation]="logDbQueryRepresentation">
+  </app-log-db-query-results>
+</span>
