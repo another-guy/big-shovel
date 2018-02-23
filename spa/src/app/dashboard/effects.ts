@@ -1,10 +1,13 @@
+import 'rxjs/add/observable/of';
+import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/concatMap';
-import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/delay';
+import 'rxjs/add/operator/map';
 
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
+import { Observable } from 'rxjs/Observable';
 
 import { ADD_GRAPH, AddGraph, GRAPH_DATA_LOADED, GraphDataLoaded, RedrawGraph } from './actions';
 import { toStringRepresentation } from './models/log-db-query';
@@ -19,6 +22,7 @@ export class Effects {
         this._http
             .get(`http://localhost:3003/logs/timeseries?${toStringRepresentation(addGraph.logDbQuery)}`)
             .map(logEntries => (new GraphDataLoaded(addGraph.logDbQuery, <LogEntry[]>logEntries)))
+            .catch(errorResponse => (console.info(errorResponse), Observable.of()))
     );
 
   @Effect() graphDataLoaded$ = this._actions

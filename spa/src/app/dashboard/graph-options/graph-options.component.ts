@@ -36,8 +36,8 @@ export class GraphOptionsComponent {
     private _store: Store<AppState>,
   ) {
     const groupOptions = this._store.select(state => state.dashboard.allGraphOptions[this.logDbQueryRepresentation]);
-    this.chartType$ = groupOptions.select(options => options.chartType);
-    this.metricType$ = groupOptions.select(options => options.metricType);
+    this.chartType$ = groupOptions.select(options => options && options.chartType);
+    this.metricType$ = groupOptions.select(options => options && options.metricType);
   }
 
   dispatch(chartType: string, metricType: Metric): void {
