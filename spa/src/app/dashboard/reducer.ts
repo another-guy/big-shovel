@@ -22,7 +22,10 @@ export function handleFailedGraphDataLoaded(currentState: State, action: GraphDa
 
   const allLogs = { ...currentState.allLogs };
   const existingLogEntryData = allLogs[logDbQueryAsString];
-  allLogs[logDbQueryAsString] = { error: JSON.stringify(action.errorResponse, null, 2), logEntryList: (existingLogEntryData && existingLogEntryData.logEntryList) || [] };
+  allLogs[logDbQueryAsString] = {
+    error: `[${(<any>action.errorResponse).message}]. ${(<any>action.errorResponse).error}`,
+    logEntryList: (existingLogEntryData && existingLogEntryData.logEntryList) || []
+  };
 
   const allGraphOptions = { ...currentState.allGraphOptions };
   allGraphOptions[logDbQueryAsString] = { chartType: 'line', metricType: hourlyMetric };
