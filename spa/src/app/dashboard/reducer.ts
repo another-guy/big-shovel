@@ -8,18 +8,33 @@ import { GraphOptions } from './models/graph-options';
 
 export function reducer(currentState: State = initialState, action: dashboard.Actions): State {
   switch (action.type) {
-    case dashboard.GRAPH_DATA_LOADED: return handleGraphDataLoaded(currentState, action);
+    case dashboard.GRAPH_DATA_LOADED: return action.errorResponse ?
+      handleFailedGraphDataLoaded(currentState, action) :
+      handleSuccessfulGraphDataLoaded(currentState, action);
     case dashboard.UPDATE_GRAPH_OPTIONS: return handleUpdateGraphOptions(currentState, action);
     case dashboard.REMOVE_GRAPH: return handleRemoveGraph(currentState, action);
     default: return currentState;
   }
 }
 
-export function handleGraphDataLoaded(currentState: State, action: GraphDataLoaded): State {
+export function handleFailedGraphDataLoaded(currentState: State, action: GraphDataLoaded): State {
   const logDbQueryAsString = toStringRepresentation(action.logDbQuery);
 
   const allLogs = { ...currentState.allLogs };
-  allLogs[logDbQueryAsString] = action.data;
+  const existingLogEntryData = allLogs[logDbQueryAsString];
+  allLogs[logDbQueryAsString] = { error: JSON.stringify(action.errorResponse, null, 2), logEntryList: (existingLogEntryData && existingLogEntryData.logEntryList) || [] };
+
+  const allGraphOptions = { ...currentState.allGraphOptions };
+  allGraphOptions[logDbQueryAsString] = { chartType: 'line', metricType: hourlyMetric };
+
+  return { allLogs, allGraphOptions };
+}
+
+export function handleSuccessfulGraphDataLoaded(currentState: State, action: GraphDataLoaded): State {
+  const logDbQueryAsString = toStringRepresentation(action.logDbQuery);
+
+  const allLogs = { ...currentState.allLogs };
+  allLogs[logDbQueryAsString] = { error: null, logEntryList: action.data };
 
   const allGraphOptions = { ...currentState.allGraphOptions };
   allGraphOptions[logDbQueryAsString] = { chartType: 'line', metricType: hourlyMetric };

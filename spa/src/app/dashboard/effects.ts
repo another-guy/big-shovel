@@ -19,16 +19,16 @@ export class Effects {
   @Effect() addGraph$ = this._actions
     .ofType<AddGraph>(ADD_GRAPH)
     .concatMap(addGraph =>
-        this._http
-            .get(`http://localhost:3003/logs/timeseries?${toStringRepresentation(addGraph.logDbQuery)}`)
-            .map(logEntries => (new GraphDataLoaded(addGraph.logDbQuery, <LogEntry[]>logEntries)))
-            .catch(errorResponse => (console.info(errorResponse), Observable.of()))
+      this._http
+        .get(`http://localhost:3003/logs/timeseries?${toStringRepresentation(addGraph.logDbQuery)}`)
+        .map(logEntries => new GraphDataLoaded(addGraph.logDbQuery, <LogEntry[]>logEntries, null))
+        .catch(errorResponse => Observable.of(new GraphDataLoaded(addGraph.logDbQuery, null, errorResponse)))
     );
 
   @Effect() graphDataLoaded$ = this._actions
     .ofType<GraphDataLoaded>(GRAPH_DATA_LOADED)
     .delay(300)
-    .map(graphDataLoaded => (new RedrawGraph(toStringRepresentation(graphDataLoaded.logDbQuery))));
+    .map(graphDataLoaded => new RedrawGraph(toStringRepresentation(graphDataLoaded.logDbQuery)));
 
   constructor(
     private _http: HttpClient,

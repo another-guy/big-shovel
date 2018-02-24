@@ -41,9 +41,10 @@ export class GraphComponent implements OnInit, OnDestroy {
 
   collapsed: boolean = false;
 
-  logEntries$: Store<LogEntry[]>;
-  graphOptions$: Store<GraphOptions>;
+  graphOptions$: Observable<GraphOptions>;
+  logEntries$: Observable<LogEntry[]>;
   totalLogEntryCount$: Observable<number>;
+  error$: Observable<string>;
 
   graphRedrawRequests$ = this._actions
     .ofType<RedrawGraph>(REDRAW_GRAPH)
@@ -55,10 +56,13 @@ export class GraphComponent implements OnInit, OnDestroy {
     private _actions: Actions,
     private _viewContainerRef: ViewContainerRef,
   ) {
-    this.logEntries$ = _store.select(state => state.dashboard.allLogs[this.logDbQueryRepresentation]);
     this.graphOptions$ = _store.select(state => state.dashboard.allGraphOptions[this.logDbQueryRepresentation]);
 
-    this.totalLogEntryCount$ = this.logEntries$.map(logEntries => logEntries && logEntries.length);
+    const data = _store.select(state => state.dashboard.allLogs[this.logDbQueryRepresentation]);
+    this.logEntries$ = data.map(loadedGraphData => loadedGraphData && loadedGraphData.logEntryList);
+    this.error$ = data.map(loadedGraphData => loadedGraphData && loadedGraphData.error);
+
+    this.totalLogEntryCount$ = data.map(loadedGraphData => loadedGraphData && loadedGraphData.logEntryList && loadedGraphData.logEntryList.length);
   }
 
   ngOnInit(): void {

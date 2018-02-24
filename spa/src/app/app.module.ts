@@ -10,6 +10,7 @@ import { appEffects } from './app.effects';
 import { appReducers } from './app.reducers';
 import { BuildComponent } from './dashboard/build.component';
 import { ChartTypeSelectorComponent } from './dashboard/chart-type-selector/chart-type-selector.component';
+import { DotsPipe } from './dashboard/dots/dots.pipe';
 import { GraphOptionsComponent } from './dashboard/graph-options/graph-options.component';
 import { GraphComponent } from './dashboard/graph/graph.component';
 import { LogDbQueryResultsComponent } from './dashboard/log-db-query-results/log-db-query-results.component';
@@ -31,6 +32,7 @@ import { MaterialModules } from './material.module';
     GraphOptionsComponent,
     TimeseriesComponent,
     LogEntriesComponent,
+    DotsPipe,
   ],
   imports: [
     BrowserModule,

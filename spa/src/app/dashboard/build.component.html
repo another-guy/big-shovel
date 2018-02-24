@@ -1,17 +1,17 @@
 <mat-tab-group>
   <mat-tab>
     <ng-template mat-tab-label>
-      <mat-icon>timeline</mat-icon><span>Timeseries</span>
-
-      <a href="https://mongodb.github.io/node-mongodb-native/markdown-docs/queries.html" target="_blank"><mat-icon>help_outline</mat-icon></a>
+      <mat-icon>timeline</mat-icon>
+      <span>Timeseries</span>
+      <a matTooltip="Help" href="https://mongodb.github.io/node-mongodb-native/markdown-docs/queries.html" target="_blank"><mat-icon>help_outline</mat-icon></a>
     </ng-template>
     <app-timeseries></app-timeseries>
   </mat-tab>
   <mat-tab>
     <ng-template mat-tab-label>
-      <mat-icon>list</mat-icon><span>Log Entries</span>
-
-      <a href="http://mongodb.github.io/node-mongodb-native/3.0/tutorials/aggregation/" target="_blank"><mat-icon>help_outline</mat-icon></a>
+      <mat-icon>list</mat-icon>
+      <span>Log Entries</span>
+      <a matTooltip="Help" href="http://mongodb.github.io/node-mongodb-native/3.0/tutorials/aggregation/" target="_blank"><mat-icon>help_outline</mat-icon></a>
     </ng-template>
     <app-log-entries></app-log-entries>
   </mat-tab>

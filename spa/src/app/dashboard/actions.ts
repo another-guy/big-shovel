@@ -1,3 +1,4 @@
+import { HttpResponse } from '@angular/common/http';
 import { Action } from '@ngrx/store';
 
 import { GraphOptions } from './models/graph-options';
@@ -9,6 +10,7 @@ export const GRAPH_DATA_LOADED = 'graph-data-loaded';
 export const UPDATE_GRAPH_OPTIONS = 'update-graph-options';
 export const REMOVE_GRAPH = 'remove-graph';
 export const REDRAW_GRAPH = 'redraw-graph';
+export const SHOW_GRAPH_ERROR = 'show-graph-error';
 
 export class AddGraph implements Action {
   readonly type = ADD_GRAPH;
@@ -17,7 +19,7 @@ export class AddGraph implements Action {
 
 export class GraphDataLoaded implements Action {
   readonly type = GRAPH_DATA_LOADED;
-  constructor(public logDbQuery: LogDbQuery, public data: LogEntry[]) { }
+  constructor(public logDbQuery: LogDbQuery, public data: LogEntry[], public errorResponse: HttpResponse<any>) { }
 }
 
 export class UpdateGraphOptions implements Action {

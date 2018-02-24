@@ -1,6 +1,6 @@
 <span>
   <mat-toolbar>
-    <span class="code">{{ logDbQueryRepresentation }}</span>
+    <span class="code" [matTooltip]="logDbQueryRepresentation">{{ logDbQueryRepresentation | dots:32 }}</span>
     <span class="spacer"></span>
     <span>Total record count: {{ totalLogEntryCount$ | async }}</span>
     <span class="spacer"></span>
@@ -21,6 +21,12 @@
 
   <mat-card [style.display]="collapsed?'none':''">
     <mat-card-content>
+      <span *ngIf="error$ | async">
+        <mat-chip-list>
+          <mat-chip color="warn" selected="true">{{ error$ | async }}</mat-chip>
+        </mat-chip-list>
+      </span>
+
       <div class="svg-container"></div>
     
       <app-log-entry-list
