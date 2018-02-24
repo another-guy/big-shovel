@@ -2,8 +2,8 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 
-import { AppState } from '../../app.reducers';
-import { Actions, AddGraph } from '../actions';
+import { AppState } from '../../../app.reducers';
+import { Actions, AddGraph } from '../../../shared/store-actions';
 
 const DEFAULT_EXPRESSION = '{}';
 const DEFAULT_SORT = '{}';

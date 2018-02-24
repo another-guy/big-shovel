@@ -1,5 +1,5 @@
-import { GraphOptions } from './models/graph-options';
-import { LogEntry } from './models/log-entry';
+import { GraphOptions } from '../shared/models/graph-options';
+import { LogEntry } from '../shared/models/log-entry';
 
 export interface LoadedLogEntryData {
   logEntryList: LogEntry[];

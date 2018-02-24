@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 import { MaterialModules } from './material.module-list';
 import { SharedComponents } from './shared.component-list';
@@ -12,12 +13,12 @@ const SharedDeclarations = [
 @NgModule({
   declarations: SharedDeclarations,
   imports: [
-    // @angular/material
+    FormsModule,
     ...MaterialModules,
   ],
   exports: [
+    FormsModule,
     ...SharedDeclarations,
-    // @angular/material
     ...MaterialModules,
   ],
   providers: [

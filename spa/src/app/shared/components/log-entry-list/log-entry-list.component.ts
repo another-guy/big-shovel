@@ -2,8 +2,8 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 
-import { AppState } from '../../app.reducers';
-import { LogEntry } from '../models/log-entry';
+import { AppState } from '../../../app.reducers';
+import { LogEntry } from '../../models/log-entry';
 
 @Component({
   selector: 'app-log-entry-list',

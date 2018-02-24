@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 
-import { CHART_TYPES } from '../graph/graph-c3-config-helper';
+import { CHART_TYPES } from '../../c3/config-helper';
 
 @Component({
   selector: 'app-chart-type-selector',

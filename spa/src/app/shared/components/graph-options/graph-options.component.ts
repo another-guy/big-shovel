@@ -2,9 +2,10 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 
-import { AppState } from '../../app.reducers';
-import { RedrawGraph, UpdateGraphOptions } from '../actions';
-import { Metric } from '../models/metric-type';
+import { AppState } from '../../../app.reducers';
+import { Metric } from '../../models/metric-type';
+import { RedrawGraph, UpdateGraphOptions } from '../../store-actions';
+
 
 @Component({
   selector: 'app-graph-options',

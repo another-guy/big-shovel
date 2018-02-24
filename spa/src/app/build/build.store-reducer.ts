@@ -1,10 +1,10 @@
-import * as dashboard from './actions';
-import { toStringRepresentation } from './models/log-db-query';
-import { hourlyMetric } from './models/metric-type';
-import { initialState, State } from './state';
+import * as dashboard from '../shared/store-actions';
 import { AppState } from '../app.reducers';
-import { GraphDataLoaded, UpdateGraphOptions, RemoveGraph } from './actions';
-import { GraphOptions } from './models/graph-options';
+import { GraphDataLoaded, UpdateGraphOptions, RemoveGraph } from '../shared/store-actions';
+import { GraphOptions } from '../shared/models/graph-options';
+import { toStringRepresentation } from '../shared/models/log-db-query';
+import { hourlyMetric } from '../shared/models/metric-type';
+import { initialState, State } from './build.store-state';
 
 export function reducer(currentState: State = initialState, action: dashboard.Actions): State {
   switch (action.type) {

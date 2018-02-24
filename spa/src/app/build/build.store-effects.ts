@@ -9,9 +9,9 @@ import { Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
 
-import { ADD_GRAPH, AddGraph, GRAPH_DATA_LOADED, GraphDataLoaded, RedrawGraph } from './actions';
-import { toStringRepresentation } from './models/log-db-query';
-import { LogEntry } from './models/log-entry';
+import { toStringRepresentation } from '../shared/models/log-db-query';
+import { LogEntry } from '../shared/models/log-entry';
+import { ADD_GRAPH, AddGraph, GRAPH_DATA_LOADED, GraphDataLoaded, RedrawGraph } from '../shared/store-actions';
 
 @Injectable()
 export class Effects {

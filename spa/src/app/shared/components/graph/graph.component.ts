@@ -16,11 +16,11 @@ import * as c3 from 'c3';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 
-import { AppState } from '../../app.reducers';
-import { REDRAW_GRAPH, RedrawGraph, RemoveGraph } from '../actions';
-import { GraphOptions } from '../models/graph-options';
-import { LogEntry } from '../models/log-entry';
-import { GraphC3ConfigHelper } from './graph-c3-config-helper';
+import { AppState } from '../../../app.reducers';
+import { GraphC3ConfigHelper } from '../../../shared/c3/config-helper';
+import { GraphOptions } from '../../../shared/models/graph-options';
+import { LogEntry } from '../../../shared/models/log-entry';
+import { REDRAW_GRAPH, RedrawGraph, RemoveGraph } from '../../store-actions';
 
 @Component({
   selector: 'app-graph',

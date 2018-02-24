@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 
-import { Metric, METRIC_TYPES } from '../models/metric-type';
+import { Metric, METRIC_TYPES } from '../../models/metric-type';
 
 @Component({
   selector: 'app-metric-type-selector',

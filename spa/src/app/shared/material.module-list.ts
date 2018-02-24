@@ -18,20 +18,16 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 export const MaterialModules = [
   BrowserAnimationsModule,
 
-  MatCommonModule,
-
-  MatFormFieldModule,
-
   MatButtonModule,
-  MatInputModule,
-  MatIconModule,
-  MatSelectModule,
-  MatToolbarModule,
-
   MatCardModule,
-  MatTabsModule,
-  MatSlideToggleModule,
-
   MatChipsModule,
+  MatCommonModule,
+  MatFormFieldModule,
+  MatIconModule,
+  MatInputModule,
+  MatSelectModule,
+  MatSlideToggleModule,
+  MatTabsModule,
+  MatToolbarModule,
   MatTooltipModule,
 ];
