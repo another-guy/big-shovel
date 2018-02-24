@@ -10,16 +10,14 @@ import { appEffects } from './app.effects';
 import { appReducers } from './app.reducers';
 import { BuildComponent } from './dashboard/build.component';
 import { ChartTypeSelectorComponent } from './dashboard/chart-type-selector/chart-type-selector.component';
-import { DotsPipe } from './dashboard/dots/dots.pipe';
 import { GraphOptionsComponent } from './dashboard/graph-options/graph-options.component';
 import { GraphComponent } from './dashboard/graph/graph.component';
-import { HelpLinkComponent } from './dashboard/help-link/help-link.component';
 import { LogDbQueryResultsComponent } from './dashboard/log-db-query-results/log-db-query-results.component';
 import { LogEntriesComponent } from './dashboard/log-entries/log-entries.component';
 import { LogEntryListComponent } from './dashboard/log-entry-list/log-entry-list.component';
 import { MetricTypeSelectorComponent } from './dashboard/metric-type-selector/metric-type-selector.component';
 import { TimeseriesComponent } from './dashboard/timeseries/timeseries.component';
-import { MaterialModules } from './material.module';
+import { SharedModule } from './shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -33,8 +31,6 @@ import { MaterialModules } from './material.module';
     GraphOptionsComponent,
     TimeseriesComponent,
     LogEntriesComponent,
-    HelpLinkComponent,
-    DotsPipe,
   ],
   imports: [
     BrowserModule,
@@ -45,8 +41,8 @@ import { MaterialModules } from './material.module';
     StoreModule.forRoot(appReducers),
     EffectsModule.forRoot(appEffects),
 
-    // @angular/material
-    ...MaterialModules,
+    // Feature modules
+    SharedModule,
   ],
   providers: [
   ],
