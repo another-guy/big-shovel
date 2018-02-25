@@ -1,3 +1,4 @@
+import { errorResponseToString } from '../shared/error-response';
 import { GraphOptions } from '../shared/models/graph-options';
 import { toStringRepresentation } from '../shared/models/log-db-query';
 import { hourlyMetric } from '../shared/models/metric-type';
@@ -21,7 +22,7 @@ export function handleFailedGraphDataLoaded(currentState: BuildTimeseriesState, 
   const allLogs = { ...currentState.allLogs };
   const existingLogEntryData = allLogs[logDbQueryAsString];
   allLogs[logDbQueryAsString] = {
-    error: `[${(<any>action.errorResponse).message}]. ${(<any>action.errorResponse).error}`,
+    error: errorResponseToString(action.errorResponse),
     logEntryList: (existingLogEntryData && existingLogEntryData.logEntryList) || []
   };
 

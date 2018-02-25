@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LogEntriesComponent } from './log-entries.component';
+import { LogEntryTableComponent } from './log-entry-table.component';
 
-describe('LogEntriesComponent', () => {
-  let component: LogEntriesComponent;
-  let fixture: ComponentFixture<LogEntriesComponent>;
+describe('LogEntryTableComponent', () => {
+  let component: LogEntryTableComponent;
+  let fixture: ComponentFixture<LogEntryTableComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ LogEntriesComponent ]
+      declarations: [ LogEntryTableComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(LogEntriesComponent);
+    fixture = TestBed.createComponent(LogEntryTableComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -67,7 +67,7 @@ export class AggregationPipelineGraphDataLoaded implements Action {
   readonly type = AGGREGATION_PIPELINE_GRAPH_DATA_LOADED;
   constructor(
     public aggregationPipeline: string,
-    public requesterId: string,
+    public requesterId: string, // TODO make sure it's used
     public logEntries: UntypedLogEntry[],
     public errorResponse: HttpResponse<any>,
   ) { }

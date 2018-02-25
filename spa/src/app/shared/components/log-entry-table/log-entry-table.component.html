@@ -1,0 +1,9 @@
+<mat-table #table [dataSource]="list">
+  <ng-container *ngFor="let header of listHeader" [matColumnDef]="header">
+    <mat-header-cell *matHeaderCellDef> {{ header }} </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{ element[header] }} </mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="listHeader"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: listHeader;"></mat-row>
+</mat-table>

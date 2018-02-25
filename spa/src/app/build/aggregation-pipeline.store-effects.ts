@@ -29,7 +29,7 @@ export class Effects {
     .concatMap(action => 
       this._http
         .get(`${host}/logs/aggregate?p=${action.aggregationPipeline}`)
-        .map(entries => 
+        .map(entries =>
           new AggregationPipelineGraphDataLoaded(action.aggregationPipeline, action.requesterId, <UntypedLogEntry[]>entries, null)
         )
         .catch(errorResponse => Observable.of(

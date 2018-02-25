@@ -1,3 +1,4 @@
+import { errorResponseToString } from '../shared/error-response';
 import * as global from '../shared/store-actions';
 import { BuildAggregationPipelineState, initialState } from './aggregation-pipeline.store-state';
 
@@ -12,9 +13,9 @@ export function reducer(currentState: BuildAggregationPipelineState = initialSta
 }
 
 export function handleFailedAggregationPipelineGraphDataLoaded(currentState: BuildAggregationPipelineState, action: global.AggregationPipelineGraphDataLoaded): BuildAggregationPipelineState {
-  throw new Error(`NOT IMPLEMENTED`);
+  return { error: errorResponseToString(action.errorResponse), logEntryList: initialState.logEntryList };
 }
 
 export function handleSuccessfulAggregationPipelineGraphDataLoaded(currentState: BuildAggregationPipelineState, action: global.AggregationPipelineGraphDataLoaded): BuildAggregationPipelineState {
-  throw new Error(`NOT IMPLEMENTED`);
+  return { error: initialState.error, logEntryList: action.logEntries };
 }
