@@ -1,5 +1,7 @@
-import * as fromDashboard from './build/build.store-effects';
+import * as buildTimeseries from './build/timeseries.store-effects';
+import * as buildAggregationPipeline from './build/aggregation-pipeline.store-effects';
 
 export const appEffects = [
-  fromDashboard.Effects,
+  buildTimeseries.Effects,
+  buildAggregationPipeline.Effects,
 ];

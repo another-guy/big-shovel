@@ -9,6 +9,8 @@
         matTextareaAutosize
         matAutosizeMinRows="5"
         matAutosizeMaxRows="15"
+
+        [(ngModel)]="aggregationPipeline"
       ></textarea>
 
       <mat-hint align="start"><strong>The most commonly used operators are $count, $group, $limit, $match, $project, $sort, $unwind.</strong> </mat-hint>

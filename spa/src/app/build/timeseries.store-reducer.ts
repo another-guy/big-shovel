@@ -1,23 +1,21 @@
-import * as dashboard from '../shared/store-actions';
-import { AppState } from '../app.reducers';
-import { GraphDataLoaded, UpdateGraphOptions, RemoveGraph } from '../shared/store-actions';
 import { GraphOptions } from '../shared/models/graph-options';
 import { toStringRepresentation } from '../shared/models/log-db-query';
 import { hourlyMetric } from '../shared/models/metric-type';
-import { initialState, State } from './build.store-state';
+import * as global from '../shared/store-actions';
+import { BuildTimeseriesState, initialState } from './timeseries.store-state';
 
-export function reducer(currentState: State = initialState, action: dashboard.Actions): State {
+export function reducer(currentState: BuildTimeseriesState = initialState, action: global.Actions): BuildTimeseriesState {
   switch (action.type) {
-    case dashboard.GRAPH_DATA_LOADED: return action.errorResponse ?
+    case global.GRAPH_DATA_LOADED: return action.errorResponse ?
       handleFailedGraphDataLoaded(currentState, action) :
       handleSuccessfulGraphDataLoaded(currentState, action);
-    case dashboard.UPDATE_GRAPH_OPTIONS: return handleUpdateGraphOptions(currentState, action);
-    case dashboard.REMOVE_GRAPH: return handleRemoveGraph(currentState, action);
+    case global.UPDATE_GRAPH_OPTIONS: return handleUpdateGraphOptions(currentState, action);
+    case global.REMOVE_GRAPH: return handleRemoveGraph(currentState, action);
     default: return currentState;
   }
 }
 
-export function handleFailedGraphDataLoaded(currentState: State, action: GraphDataLoaded): State {
+export function handleFailedGraphDataLoaded(currentState: BuildTimeseriesState, action: global.GraphDataLoaded): BuildTimeseriesState {
   const logDbQueryAsString = toStringRepresentation(action.logDbQuery);
 
   const allLogs = { ...currentState.allLogs };
@@ -33,7 +31,7 @@ export function handleFailedGraphDataLoaded(currentState: State, action: GraphDa
   return { allLogs, allGraphOptions };
 }
 
-export function handleSuccessfulGraphDataLoaded(currentState: State, action: GraphDataLoaded): State {
+export function handleSuccessfulGraphDataLoaded(currentState: BuildTimeseriesState, action: global.GraphDataLoaded): BuildTimeseriesState {
   const logDbQueryAsString = toStringRepresentation(action.logDbQuery);
 
   const allLogs = { ...currentState.allLogs };
@@ -45,7 +43,7 @@ export function handleSuccessfulGraphDataLoaded(currentState: State, action: Gra
   return { allLogs, allGraphOptions };
 }
 
-export function handleUpdateGraphOptions(currentState: State, action: UpdateGraphOptions): State {
+export function handleUpdateGraphOptions(currentState: BuildTimeseriesState, action: global.UpdateGraphOptions): BuildTimeseriesState {
   const allGraphOptions = { ...currentState.allGraphOptions };
 
   const optionsBeforeEvent = allGraphOptions[action.logDbQueryRepresentation] || ({} as GraphOptions);
@@ -62,7 +60,7 @@ export function handleUpdateGraphOptions(currentState: State, action: UpdateGrap
   return { allLogs: currentState.allLogs, allGraphOptions: allGraphOptions };
 }
 
-export function handleRemoveGraph(currentState: State, action: RemoveGraph): State {
+export function handleRemoveGraph(currentState: BuildTimeseriesState, action: global.RemoveGraph): BuildTimeseriesState {
   const logDbQueryAsString = action.logDbQueryRepresentation;
 
   const allLogs = { ...currentState.allLogs };

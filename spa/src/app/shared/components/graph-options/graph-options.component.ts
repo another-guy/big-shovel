@@ -6,7 +6,6 @@ import { AppState } from '../../../app.reducers';
 import { Metric } from '../../models/metric-type';
 import { RedrawGraph, UpdateGraphOptions } from '../../store-actions';
 
-
 @Component({
   selector: 'app-graph-options',
   templateUrl: './graph-options.component.html',
@@ -36,7 +35,7 @@ export class GraphOptionsComponent {
   constructor(
     private _store: Store<AppState>,
   ) {
-    const groupOptions = this._store.select(state => state.dashboard.allGraphOptions[this.logDbQueryRepresentation]);
+    const groupOptions = this._store.select(state => state.buildTimeseries.allGraphOptions[this.logDbQueryRepresentation]);
     this.chartType$ = groupOptions.select(options => options && options.chartType);
     this.metricType$ = groupOptions.select(options => options && options.metricType);
   }

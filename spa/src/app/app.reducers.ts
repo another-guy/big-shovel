@@ -1,12 +1,16 @@
 import { ActionReducerMap } from '@ngrx/store';
 
-import { reducer as DashboardReducer } from './build/build.store-reducer';
-import { State as DashboardState } from './build/build.store-state';
+import { reducer as BuildAggregationPipelineReducer } from './build/aggregation-pipeline.store-reducer';
+import { BuildAggregationPipelineState } from './build/aggregation-pipeline.store-state';
+import { reducer as BuildTimeseriesReducer } from './build/timeseries.store-reducer';
+import { BuildTimeseriesState } from './build/timeseries.store-state';
 
 export interface AppState {
-  dashboard: DashboardState;
+  buildTimeseries: BuildTimeseriesState;
+  buildAggregationPipeline: BuildAggregationPipelineState;
 }
 
 export const appReducers: ActionReducerMap<AppState> = {
-  dashboard: DashboardReducer,
+  buildTimeseries: BuildTimeseriesReducer,
+  buildAggregationPipeline: BuildAggregationPipelineReducer,
 };

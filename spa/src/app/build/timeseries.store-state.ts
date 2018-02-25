@@ -6,12 +6,12 @@ export interface LoadedLogEntryData {
   error: string;
 }
 
-export interface State {
+export interface BuildTimeseriesState {
   allGraphOptions: { [logDbQueryRepresentation: string]: GraphOptions }
   allLogs: { [logDbQueryRepresentation: string]: LoadedLogEntryData };
 }
 
-export const initialState: State = {
+export const initialState: BuildTimeseriesState = {
   allGraphOptions: { },
   allLogs: { },
 };

@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { MaterialModules } from './material.module-list';
 import { SharedComponents } from './shared.component-list';
 import { SharedPipes } from './shared.pipe-list';
+import { SharedServices } from './shared.service-list';
 
 const SharedDeclarations = [
   ...SharedComponents,
@@ -22,6 +23,7 @@ const SharedDeclarations = [
     ...MaterialModules,
   ],
   providers: [
+    ...SharedServices,
   ],
 })
 export class SharedModule { }

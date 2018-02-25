@@ -28,7 +28,7 @@ export class TimeseriesComponent {
     private _store: Store<AppState>,
   ) {
     this.clearExpression();
-    this.logDbQueryRepresentationList$ = _store.select(state => Object.getOwnPropertyNames(state.dashboard.allLogs));
+    this.logDbQueryRepresentationList$ = _store.select(state => Object.getOwnPropertyNames(state.buildTimeseries.allLogs));
   }
 
   private dispatch(action: Actions): void {

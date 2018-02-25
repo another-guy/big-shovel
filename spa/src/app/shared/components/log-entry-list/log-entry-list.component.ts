@@ -21,7 +21,7 @@ export class LogEntryListComponent {
   constructor(
     private _store: Store<AppState>,
   ) {
-    const data = this._store.select(state => state.dashboard.allLogs[this.logDbQueryRepresentation]);
+    const data = this._store.select(state => state.buildTimeseries.allLogs[this.logDbQueryRepresentation]);
     this.logEntries$ = data.map(loadedGraphData => loadedGraphData && loadedGraphData.logEntryList);
     this.error$ = data.map(loadedGraphData => loadedGraphData && loadedGraphData.error);
   }

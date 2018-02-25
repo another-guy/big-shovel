@@ -56,9 +56,9 @@ export class GraphComponent implements OnInit, OnDestroy {
     private _actions: Actions,
     private _viewContainerRef: ViewContainerRef,
   ) {
-    this.graphOptions$ = _store.select(state => state.dashboard.allGraphOptions[this.logDbQueryRepresentation]);
+    this.graphOptions$ = _store.select(state => state.buildTimeseries.allGraphOptions[this.logDbQueryRepresentation]);
 
-    const data = _store.select(state => state.dashboard.allLogs[this.logDbQueryRepresentation]);
+    const data = _store.select(state => state.buildTimeseries.allLogs[this.logDbQueryRepresentation]);
     this.logEntries$ = data.map(loadedGraphData => loadedGraphData && loadedGraphData.logEntryList);
     this.error$ = data.map(loadedGraphData => loadedGraphData && loadedGraphData.error);
 
