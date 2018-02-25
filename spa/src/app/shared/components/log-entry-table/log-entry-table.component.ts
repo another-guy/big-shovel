@@ -25,4 +25,8 @@ export class LogEntryTableComponent {
     this.dataSource.sort = this.sort;
   }
 
+  applyFilter(filterValue: string): void {
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
 }

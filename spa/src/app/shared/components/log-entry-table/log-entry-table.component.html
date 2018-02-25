@@ -1,9 +1,15 @@
-<mat-table #table [dataSource]="dataSource" matSort>
-  <ng-container *ngFor="let header of listHeader" [matColumnDef]="header">
-    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ header }}</mat-header-cell>
-    <mat-cell *matCellDef="let element">{{ element[header] }}</mat-cell>
-  </ng-container>
+<span>
+  <mat-form-field>
+    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+  </mat-form-field>
 
-  <mat-header-row *matHeaderRowDef="listHeader"></mat-header-row>
-  <mat-row *matRowDef="let row; columns: listHeader;"></mat-row>
-</mat-table>
+  <mat-table #table [dataSource]="dataSource" matSort>
+    <ng-container *ngFor="let header of listHeader" [matColumnDef]="header">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>{{ header }}</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{ element[header] }}</mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="listHeader"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: listHeader;"></mat-row>
+  </mat-table>
+</span>
