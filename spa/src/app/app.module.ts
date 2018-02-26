@@ -24,7 +24,11 @@ import { SharedModule } from './shared/shared.module';
     StoreModule.forRoot(appReducers),
     EffectsModule.forRoot(appEffects),
     StoreDevtoolsModule.instrument({
+      name: 'BIG SHOVEL',
       maxAge: 25,
+      
+      // HACK: https://github.com/ngrx/platform/issues/825#issuecomment-368058930
+      actionSanitizer: action => JSON.parse(JSON.stringify(action)),
     }),
 
     // Feature modules
