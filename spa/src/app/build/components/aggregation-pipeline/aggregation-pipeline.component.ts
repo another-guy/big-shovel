@@ -24,6 +24,7 @@ export class AggregationPipelineComponent {
   aggregationPipeline: string;
   private _id: string;
 
+  error$: Observable<string>;
   list$: Observable<any[]>;
   listHeader$: Observable<string[]>;
   
@@ -33,7 +34,10 @@ export class AggregationPipelineComponent {
   ) {
     this._id = _idGenerator.nextString;
 
-    this.list$ = this._store.select(state => state.buildAggregationPipeline.logEntryList);
+    const aggregationPipeline$ = this._store.select(state => state.buildAggregationPipeline);
+    
+    this.error$ = aggregationPipeline$.map(aggregationPipeline => aggregationPipeline.error);
+    this.list$ = aggregationPipeline$.map(aggregationPipeline => aggregationPipeline.logEntryList);
     this.listHeader$ = this.list$.map(logEntryList => Object.getOwnPropertyNames(logEntryList.length > 0 ? logEntryList[0] : {}));
   }
 

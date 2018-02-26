@@ -1,4 +1,4 @@
-<span>
+<span *ngIf="haveRowsToShow">
   <mat-form-field>
     <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
   </mat-form-field>

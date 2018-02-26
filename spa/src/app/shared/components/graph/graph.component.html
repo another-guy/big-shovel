@@ -21,11 +21,7 @@
 
   <mat-card [style.display]="collapsed?'none':''">
     <mat-card-content>
-      <span *ngIf="error$ | async">
-        <mat-chip-list>
-          <mat-chip color="warn" selected="true">{{ error$ | async }}</mat-chip>
-        </mat-chip-list>
-      </span>
+      <app-error-chip [error]="error$ | async"></app-error-chip>
 
       <div class="svg-container"></div>
     

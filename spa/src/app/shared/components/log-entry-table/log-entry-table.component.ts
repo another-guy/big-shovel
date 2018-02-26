@@ -29,4 +29,7 @@ export class LogEntryTableComponent {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
+  get haveRowsToShow(): boolean {
+    return this._list.length > 0;
+  }
 }
