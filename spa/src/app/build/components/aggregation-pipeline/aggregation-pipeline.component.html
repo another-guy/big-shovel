@@ -29,4 +29,10 @@
       <app-log-entry-table [list]="list$ | async" [listHeader]="listHeader$ | async"></app-log-entry-table>
     </mat-card-content>
   </mat-card>
+
+  <mat-card>
+    <mat-card-content>
+      <app-graph [graphId]="graphId" [svgSize]="{ width: 1000, height: 400 }"></app-graph>
+    </mat-card-content>
+  </mat-card>
 </div>

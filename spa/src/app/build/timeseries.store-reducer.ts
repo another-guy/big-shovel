@@ -1,4 +1,3 @@
-import { errorResponseToString } from '../shared/error-response';
 import { GraphOptions } from '../shared/models/graph-options';
 import { toStringRepresentation } from '../shared/models/log-db-query';
 import { hourlyMetric } from '../shared/models/metric-type';
@@ -19,35 +18,25 @@ export function reducer(currentState: BuildTimeseriesState = initialState, actio
 export function handleFailedGraphDataLoaded(currentState: BuildTimeseriesState, action: global.GraphDataLoaded): BuildTimeseriesState {
   const logDbQueryAsString = toStringRepresentation(action.logDbQuery);
 
-  const allLogs = { ...currentState.allLogs };
-  const existingLogEntryData = allLogs[logDbQueryAsString];
-  allLogs[logDbQueryAsString] = {
-    error: errorResponseToString(action.errorResponse),
-    logEntryList: (existingLogEntryData && existingLogEntryData.logEntryList) || []
-  };
-
   const allGraphOptions = { ...currentState.allGraphOptions };
   allGraphOptions[logDbQueryAsString] = { chartType: 'line', metricType: hourlyMetric };
 
-  return { allLogs, allGraphOptions };
+  return { allGraphOptions };
 }
 
 export function handleSuccessfulGraphDataLoaded(currentState: BuildTimeseriesState, action: global.GraphDataLoaded): BuildTimeseriesState {
   const logDbQueryAsString = toStringRepresentation(action.logDbQuery);
 
-  const allLogs = { ...currentState.allLogs };
-  allLogs[logDbQueryAsString] = { error: null, logEntryList: action.data };
-
   const allGraphOptions = { ...currentState.allGraphOptions };
   allGraphOptions[logDbQueryAsString] = { chartType: 'line', metricType: hourlyMetric };
 
-  return { allLogs, allGraphOptions };
+  return { allGraphOptions };
 }
 
 export function handleUpdateGraphOptions(currentState: BuildTimeseriesState, action: global.UpdateGraphOptions): BuildTimeseriesState {
   const allGraphOptions = { ...currentState.allGraphOptions };
 
-  const optionsBeforeEvent = allGraphOptions[action.logDbQueryRepresentation] || ({} as GraphOptions);
+  const optionsBeforeEvent = allGraphOptions[action.graphId] || ({} as GraphOptions);
   const newOptions = { ...optionsBeforeEvent };
   Object
     .getOwnPropertyNames(action.options)
@@ -56,19 +45,16 @@ export function handleUpdateGraphOptions(currentState: BuildTimeseriesState, act
       if (proposedValue !== undefined) newOptions[key] = proposedValue;
     });
 
-  allGraphOptions[action.logDbQueryRepresentation] = newOptions;
+  allGraphOptions[action.graphId] = newOptions;
 
-  return { allLogs: currentState.allLogs, allGraphOptions: allGraphOptions };
+  return { allGraphOptions };
 }
 
 export function handleRemoveGraph(currentState: BuildTimeseriesState, action: global.RemoveGraph): BuildTimeseriesState {
-  const logDbQueryAsString = action.logDbQueryRepresentation;
-
-  const allLogs = { ...currentState.allLogs };
-  delete allLogs[logDbQueryAsString];
+  const logDbQueryAsString = action.graphId;
 
   const allGraphOptions = { ...currentState.allGraphOptions };
   delete allGraphOptions[logDbQueryAsString];
 
-  return { allLogs, allGraphOptions };
+  return { allGraphOptions };
 }

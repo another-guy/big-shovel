@@ -56,13 +56,13 @@ export class GraphC3ConfigHelper {
 
     const data: c3.Data = (() => {
       switch (chartType) {
-        case BAR: return { ...commonData, type: 'bar', columns, colors }; break;
-        case LINE: return { ...commonData, columns, colors }; break;
-        case SPLINE: return { ...commonData, type: 'spline', columns, colors }; break;
-        case AREA: return { ...commonData, columns, types: areaTypes, colors }; break;
-        case STEP: return { ...commonData, columns, types: stepTypes, colors }; break;
-        case STACKED_BAR: return { ...commonData, type: 'bar', columns, groups, colors }; break;
-        case STACKED_AREA: return { ...commonData, columns, groups, types: areaSplineTypes, colors }; break;
+        case BAR: return { ...commonData, type: 'bar', columns, colors };
+        case LINE: return { ...commonData, columns, colors };
+        case SPLINE: return { ...commonData, type: 'spline', columns, colors };
+        case AREA: return { ...commonData, columns, types: areaTypes, colors };
+        case STEP: return { ...commonData, columns, types: stepTypes, colors };
+        case STACKED_BAR: return { ...commonData, type: 'bar', columns, groups, colors };
+        case STACKED_AREA: return { ...commonData, columns, groups, types: areaSplineTypes, colors };
         default: throw new Error(`Unsupported graph mode '${chartType}'`);
       }
     })();

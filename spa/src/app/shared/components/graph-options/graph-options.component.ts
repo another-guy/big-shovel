@@ -14,7 +14,7 @@ import { RedrawGraph, UpdateGraphOptions } from '../../store-actions';
 })
 export class GraphOptionsComponent {
 
-  @Input() logDbQueryRepresentation: string;
+  @Input() graphId: string;
 
   autoRedrawGraph: boolean = true;
 
@@ -29,19 +29,19 @@ export class GraphOptionsComponent {
   }
 
   requestRedrawGraph(): void {
-    this._store.dispatch(new RedrawGraph(this.logDbQueryRepresentation));
+    this._store.dispatch(new RedrawGraph(this.graphId));
   }
 
   constructor(
     private _store: Store<AppState>,
   ) {
-    const groupOptions = this._store.select(state => state.buildTimeseries.allGraphOptions[this.logDbQueryRepresentation]);
+    const groupOptions = this._store.select(state => state.buildTimeseries.allGraphOptions[this.graphId]);
     this.chartType$ = groupOptions.select(options => options && options.chartType);
     this.metricType$ = groupOptions.select(options => options && options.metricType);
   }
 
   dispatch(chartType: string, metricType: Metric): void {
-    this._store.dispatch(new UpdateGraphOptions(this.logDbQueryRepresentation, { chartType, metricType }));
+    this._store.dispatch(new UpdateGraphOptions(this.graphId, { chartType, metricType }));
     if (this.autoRedrawGraph) {
       this.requestRedrawGraph();
     }

@@ -31,13 +31,9 @@ import { REDRAW_GRAPH, RedrawGraph, RemoveGraph } from '../../store-actions';
 })
 export class GraphComponent implements OnInit, OnDestroy {
 
-  trackByLogEntry(index: number, logEntry: LogEntry): string {
-    return logEntry._id;
-  }
-  
   @Input() svgSize = { width: 600, height: 100, };
 
-  @Input() logDbQueryRepresentation: string;
+  @Input() graphId: string;
 
   collapsed: boolean = false;
 
@@ -48,7 +44,7 @@ export class GraphComponent implements OnInit, OnDestroy {
 
   graphRedrawRequests$ = this._actions
     .ofType<RedrawGraph>(REDRAW_GRAPH)
-    .filter(action => action.logDbQueryRepresentation === this.logDbQueryRepresentation);
+    .filter(action => action.graphId === this.graphId);
 
   private _plotSubscription: Subscription;
   constructor(
@@ -56,9 +52,9 @@ export class GraphComponent implements OnInit, OnDestroy {
     private _actions: Actions,
     private _viewContainerRef: ViewContainerRef,
   ) {
-    this.graphOptions$ = _store.select(state => state.buildTimeseries.allGraphOptions[this.logDbQueryRepresentation]);
+    this.graphOptions$ = _store.select(state => state.buildTimeseries.allGraphOptions[this.graphId]);
 
-    const data$ = _store.select(state => state.buildTimeseries.allLogs[this.logDbQueryRepresentation]);
+    const data$ = _store.select(state => state.graph.logs[this.graphId]);
     this.logEntries$ = data$.map(loadedGraphData => loadedGraphData && loadedGraphData.logEntryList);
     this.error$ = data$.map(loadedGraphData => loadedGraphData && loadedGraphData.error);
 
@@ -87,7 +83,7 @@ export class GraphComponent implements OnInit, OnDestroy {
   }
 
   removeTrackedExpression(): void {
-    this._store.dispatch(new RemoveGraph(this.logDbQueryRepresentation));
+    this._store.dispatch(new RemoveGraph(this.graphId));
   }
 
   private plot(logEntries: LogEntry[], graphOptions: GraphOptions): void {

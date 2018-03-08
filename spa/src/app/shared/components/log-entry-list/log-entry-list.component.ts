@@ -13,7 +13,7 @@ import { LogEntry } from '../../models/log-entry';
 })
 export class LogEntryListComponent {
 
-  @Input() logDbQueryRepresentation: string;
+  @Input() graphId: string;
 
   logEntries$: Observable<LogEntry[]>;
   error$: Observable<string>;
@@ -21,7 +21,7 @@ export class LogEntryListComponent {
   constructor(
     private _store: Store<AppState>,
   ) {
-    const data = this._store.select(state => state.buildTimeseries.allLogs[this.logDbQueryRepresentation]);
+    const data = this._store.select(state => state.graph.logs[this.graphId]);
     this.logEntries$ = data.map(loadedGraphData => loadedGraphData && loadedGraphData.logEntryList);
     this.error$ = data.map(loadedGraphData => loadedGraphData && loadedGraphData.error);
   }

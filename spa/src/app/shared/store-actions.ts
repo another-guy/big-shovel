@@ -36,7 +36,7 @@ export class GraphDataLoaded implements Action {
 export class UpdateGraphOptions implements Action {
   readonly type = UPDATE_GRAPH_OPTIONS;
   constructor(
-    public logDbQueryRepresentation: string,
+    public graphId: string,
     public options: GraphOptions,
   ) { }
 }
@@ -44,14 +44,14 @@ export class UpdateGraphOptions implements Action {
 export class RemoveGraph implements Action {
   readonly type = REMOVE_GRAPH;
   constructor(
-    public logDbQueryRepresentation: string,
+    public graphId: string,
   ) { }
 }
 
 export class RedrawGraph implements Action {
   readonly type = REDRAW_GRAPH;
   constructor(
-    public logDbQueryRepresentation: string,
+    public graphId: string,
   ) { }
 }
 

@@ -1,6 +1,6 @@
 <span>
   <mat-toolbar>
-    <span class="code" [matTooltip]="logDbQueryRepresentation">{{ logDbQueryRepresentation | dots:32 }}</span>
+    <span class="code" [matTooltip]="graphId">{{ graphId | dots:32 }}</span>
     <span class="spacer"></span>
     <span>Total record count: {{ totalLogEntryCount$ | async }}</span>
     <span class="spacer"></span>
@@ -13,21 +13,19 @@
     </span>
   </mat-toolbar>
 
-  <mat-card [style.display]="collapsed?'none':''">
+  <mat-card [style.display]="collapsed ? 'none' : ''">
     <mat-card-content>
-      <app-graph-options [logDbQueryRepresentation]="logDbQueryRepresentation"></app-graph-options>
+      <app-graph-options [graphId]="graphId"></app-graph-options>
     </mat-card-content>
   </mat-card>
 
-  <mat-card [style.display]="collapsed?'none':''">
+  <mat-card [style.display]="collapsed ? 'none' : ''">
     <mat-card-content>
       <app-error-chip [error]="error$ | async"></app-error-chip>
 
       <div class="svg-container"></div>
     
-      <app-log-entry-list
-        [logDbQueryRepresentation]="logDbQueryRepresentation"
-      ></app-log-entry-list>
+      <app-log-entry-list [graphId]="graphId"></app-log-entry-list>
     </mat-card-content>
   </mat-card>
 </span>

@@ -4,7 +4,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class DotsPipe implements PipeTransform {
 
   transform(value: string, lengthBeforeDots: number): any {
-    return `${value.substr(0, lengthBeforeDots)}...`;
+    return `${value && value.substr(0, lengthBeforeDots)}...`;
   }
 
 }

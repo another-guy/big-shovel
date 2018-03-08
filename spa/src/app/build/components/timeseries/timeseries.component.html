@@ -12,7 +12,7 @@
   </mat-card-content>
 </mat-card>
 
-<span *ngFor="let logDbQueryRepresentation of (logDbQueryRepresentationList$ | async); trackBy: trackByExpression">
-  <app-log-db-query-results [logDbQueryRepresentation]="logDbQueryRepresentation">
+<span *ngFor="let graphId of (graphIdList$ | async); trackBy: trackByGraphId">
+  <app-log-db-query-results [graphId]="graphId">
   </app-log-db-query-results>
 </span>

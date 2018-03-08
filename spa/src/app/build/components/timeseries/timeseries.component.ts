@@ -18,9 +18,9 @@ export class TimeseriesComponent {
 
   queryString: string;
   sortOptionsString: string;
-  logDbQueryRepresentationList$: Observable<string[]>;
+  graphIdList$: Observable<string[]>;
 
-  trackByExpression(index: number, expression: string): string {
+  trackByGraphId(index: number, expression: string): string {
     return expression;
   }
 
@@ -28,7 +28,7 @@ export class TimeseriesComponent {
     private _store: Store<AppState>,
   ) {
     this.clearExpression();
-    this.logDbQueryRepresentationList$ = _store.select(state => Object.getOwnPropertyNames(state.buildTimeseries.allLogs));
+    this.graphIdList$ = _store.select(state => Object.getOwnPropertyNames(state.graph.logs));
   }
 
   private dispatch(action: Actions): void {
