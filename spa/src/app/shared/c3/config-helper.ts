@@ -18,61 +18,98 @@ export const CHART_TYPES = [
   STACKED_AREA,
 ];
 
+export interface XAxis {
+  metric: Metric,
+  isTimeseries: boolean,
+  xTickList: (string | number)[],
+}
+
+export interface DataSeries {
+  pointList: number[];
+  color: string;
+};
+
 export class GraphC3ConfigHelper {
 
   constructor() {};
 
-  getBaseConfigForTimeSeries(
+  createConfig(
     chartType: string,
-    metric: Metric,
-
-    // TODO Think about how to generalize these parameters
-    periodKeyList: string[],
-    errors: number[],
-    infos: number[],
+    xAxis: XAxis,
+    dataSeries: { [seriesName: string]: DataSeries },
   ) {
+    const seriesNameList = Object.getOwnPropertyNames(dataSeries);
     const columns = [
-      [ 'x', ...periodKeyList ],
-      [ 'ERRORS', ...errors ],
-      [ 'INFOS', ...infos ],
+      [ 'x', ...xAxis.xTickList ],
+      ...seriesNameList.map(seriesName => [ seriesName, ...dataSeries[seriesName].pointList ]),
     ];
-    const groups = [
-      ['ERRORS', 'INFOS'],
-    ];
-    const areaTypes = { 'INFOS': 'area', 'ERRORS': 'area' };
-    const areaSplineTypes = { 'INFOS': 'area-spline', 'ERRORS': 'area-spline' };
-    const stepTypes = { 'INFOS': 'step', 'ERRORS': 'step' };
-    const colors = { 'INFOS': '#ccc', 'ERRORS': '#f00' };
+    const groups = [ seriesNameList ];
+    const areaTypes = mapWithObject(seriesNameList, dataSeries, 'area');
+    const areaSplineTypes = mapWithObject(seriesNameList, dataSeries, 'area-spline');
+    const stepTypes = mapWithObject(seriesNameList, dataSeries, 'step');
+    const colors = sliceObject(seriesNameList, dataSeries, 'color');
 
     const commonData = {
       x: 'x',
-      xFormat: metric.timestampParseFormat,
+      xFormat: xAxis.metric.xFormat,
     };
 
-    let data: c3.Data = null;
-    switch (chartType) {
-      case BAR: data = { ...commonData, type: 'bar', columns, colors }; break;
-      case LINE: data = { ...commonData, columns, colors }; break;
-      case SPLINE: data = { ...commonData, type: 'spline', columns, colors }; break;
-      case AREA: data = { ...commonData, columns, types: areaTypes, colors }; break;
-      case STEP: data = { ...commonData, columns, types: stepTypes, colors }; break;
-      case STACKED_BAR: data = { ...commonData, type: 'bar', columns, groups, colors }; break;
-      case STACKED_AREA: data = { ...commonData, columns, groups, types: areaSplineTypes, colors }; break;
-      default: throw new Error(`Unsupported graph mode '${chartType}'`);
-    }
+    const data: c3.Data = (() => {
+      switch (chartType) {
+        case BAR: return { ...commonData, type: 'bar', columns, colors }; break;
+        case LINE: return { ...commonData, columns, colors }; break;
+        case SPLINE: return { ...commonData, type: 'spline', columns, colors }; break;
+        case AREA: return { ...commonData, columns, types: areaTypes, colors }; break;
+        case STEP: return { ...commonData, columns, types: stepTypes, colors }; break;
+        case STACKED_BAR: return { ...commonData, type: 'bar', columns, groups, colors }; break;
+        case STACKED_AREA: return { ...commonData, columns, groups, types: areaSplineTypes, colors }; break;
+        default: throw new Error(`Unsupported graph mode '${chartType}'`);
+      }
+    })();
     
     const axis: c3.Axis = {
       x: {
-        type: 'timeseries',
         tick: {
-          format: metric.timestampDisplayFormat,
+          format: xAxis.metric.xTickFormat,
         },
       },
     };
+    if (xAxis.isTimeseries) {
+      axis.x.type = 'timeseries';
+    }
 
     const bar = { width: { ratio: 0.8 } };
+    const zoom = { enabled: true };
+    const subchart = { show: true };
 
-    return { data, axis, bar };
+    return { data, axis, bar, zoom, subchart };
   }
 
+}
+
+function sliceObject(
+  seriesNameList: string[],
+  dataSeries: { [seriesName: string]: DataSeries },
+  field: string,
+): any {
+  return seriesNameList
+    .reduce((result, seriesName) => {
+      result[seriesName] = dataSeries[seriesName][field];
+      return result;
+    },
+    {}
+  );
+}
+function mapWithObject(
+  seriesNameList: string[],
+  dataSeries: { [seriesName: string]: DataSeries },
+  valueOverries: any,
+): any {
+  return seriesNameList
+    .reduce((result, seriesName) => {
+      result[seriesName] = valueOverries;
+      return result;
+    },
+    {}
+  );
 }

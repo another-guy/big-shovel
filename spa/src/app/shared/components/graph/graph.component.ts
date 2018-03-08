@@ -58,11 +58,11 @@ export class GraphComponent implements OnInit, OnDestroy {
   ) {
     this.graphOptions$ = _store.select(state => state.buildTimeseries.allGraphOptions[this.logDbQueryRepresentation]);
 
-    const data = _store.select(state => state.buildTimeseries.allLogs[this.logDbQueryRepresentation]);
-    this.logEntries$ = data.map(loadedGraphData => loadedGraphData && loadedGraphData.logEntryList);
-    this.error$ = data.map(loadedGraphData => loadedGraphData && loadedGraphData.error);
+    const data$ = _store.select(state => state.buildTimeseries.allLogs[this.logDbQueryRepresentation]);
+    this.logEntries$ = data$.map(loadedGraphData => loadedGraphData && loadedGraphData.logEntryList);
+    this.error$ = data$.map(loadedGraphData => loadedGraphData && loadedGraphData.error);
 
-    this.totalLogEntryCount$ = data.map(loadedGraphData => loadedGraphData && loadedGraphData.logEntryList && loadedGraphData.logEntryList.length);
+    this.totalLogEntryCount$ = data$.map(loadedGraphData => loadedGraphData && loadedGraphData.logEntryList && loadedGraphData.logEntryList.length);
   }
 
   ngOnInit(): void {
@@ -97,14 +97,23 @@ export class GraphComponent implements OnInit, OnDestroy {
     const errors = periodKeyList.map(periodKey => groupedByPeriod[periodKey].filter(logEntry => logEntry.level === 'ERROR').length);
     const infos = periodKeyList.map(periodKey => groupedByPeriod[periodKey].filter(logEntry => logEntry.level === 'INFO').length);
 
-    const c3ConfigBase = new GraphC3ConfigHelper().getBaseConfigForTimeSeries(graphOptions.chartType, graphOptions.metricType, periodKeyList, errors, infos);
+    const c3ConfigBase = new GraphC3ConfigHelper().createConfig(
+      graphOptions.chartType,
+      {
+        xTickList: periodKeyList,
+        metric: graphOptions.metricType,
+        isTimeseries: true,
+      },
+      {
+        'INFOS': { pointList: infos, color: 'gray' },
+        'ERRORS': { pointList: errors, color: 'red' },
+      },
+    );
 
     c3.generate({
       ...c3ConfigBase,
       bindto: this._viewContainerRef.element.nativeElement.querySelector('div.svg-container'),
       size: this.svgSize,
-      zoom: { enabled: true },
-      subchart: { show: true },
     });
   }
 

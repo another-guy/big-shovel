@@ -9,29 +9,29 @@ export type TimeStamp = string;
 
 export interface Metric {
   name: string;
-  timestampParseFormat: string;
-  timestampDisplayFormat: string;
+  xFormat: string;
+  xTickFormat: string;
   getKey: (timestamp: TimeStamp) => string;
 };
 
 export const dailyMetric: Metric = {
   name: 'day',
-  timestampParseFormat: '%Y-%m-%d',
-  timestampDisplayFormat: '%Y-%m-%d',
+  xFormat: '%Y-%m-%d',
+  xTickFormat: '%Y-%m-%d',
   getKey: (timestamp: TimeStamp) => timestamp.substring(0, 10),
 };
 
 export const hourlyMetric: Metric = {
   name: 'hour',
-  timestampParseFormat: '%Y-%m-%dT%H',
-  timestampDisplayFormat: '%Y-%m-%d %H',
+  xFormat: '%Y-%m-%dT%H',
+  xTickFormat: '%Y-%m-%d %H',
   getKey: (timestamp: TimeStamp) => timestamp.substring(0, 13),
 };
 
 export const minuteMetric: Metric = {
   name: 'minute',
-  timestampParseFormat: '%Y-%m-%dT%H:%M',
-  timestampDisplayFormat: '%Y-%m-%d %H:%M',
+  xFormat: '%Y-%m-%dT%H:%M',
+  xTickFormat: '%Y-%m-%d %H:%M',
   getKey: (timestamp: TimeStamp) => timestamp.substring(0, 16),
 };
 
