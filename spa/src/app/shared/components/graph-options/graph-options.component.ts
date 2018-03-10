@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 
-import { AppState } from '../../../app.reducers';
+import { AppState } from '../../../app.store-state';
 import { Metric } from '../../models/metric-type';
 import { RedrawGraph, UpdateGraphOptions } from '../../store-actions';
 
@@ -35,7 +35,7 @@ export class GraphOptionsComponent {
   constructor(
     private _store: Store<AppState>,
   ) {
-    const groupOptions = this._store.select(state => state.buildTimeseries.allGraphOptions[this.graphId]);
+    const groupOptions = this._store.select(state => state.graph.options[this.graphId]);
     this.chartType$ = groupOptions.select(options => options && options.chartType);
     this.metricType$ = groupOptions.select(options => options && options.metricType);
   }

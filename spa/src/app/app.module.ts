@@ -5,10 +5,9 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
-import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
-import { appEffects } from './app.effects';
-import { appReducers } from './app.reducers';
+import { appEffects } from './app.store-effects';
+import { appReducers } from './app.store-reducers';
 import { BuildModule } from './build/build.module';
 import { SharedModule } from './shared/shared.module';
 

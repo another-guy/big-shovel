@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 
-import { AppState } from '../../../app.reducers';
+import { AppState } from '../../../app.store-state';
 import { Actions, AddGraph } from '../../../shared/store-actions';
 
 const DEFAULT_EXPRESSION = '{}';
@@ -19,6 +19,8 @@ export class TimeseriesComponent {
   queryString: string;
   sortOptionsString: string;
   graphIdList$: Observable<string[]>;
+
+  private _id = `timeseries`;
 
   trackByGraphId(index: number, expression: string): string {
     return expression;
@@ -41,6 +43,6 @@ export class TimeseriesComponent {
   }
 
   addExpression(): void {
-    this.dispatch(new AddGraph({ query: this.queryString, sortOptions: this.sortOptionsString }));
+    this.dispatch(new AddGraph(this.queryString, this._id));
   }
 }

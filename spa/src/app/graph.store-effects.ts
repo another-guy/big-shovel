@@ -10,9 +10,8 @@ import { Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
 
-import { toStringRepresentation } from '../shared/models/log-db-query';
-import { LogEntry } from '../shared/models/log-entry';
-import { ADD_GRAPH, AddGraph, GRAPH_DATA_LOADED, GraphDataLoaded, RedrawGraph } from '../shared/store-actions';
+import { LogEntry } from './shared/models/log-entry';
+import { ADD_GRAPH, AddGraph, GRAPH_DATA_LOADED, GraphDataLoaded, RedrawGraph } from './shared/store-actions';
 
 const host = `http://localhost:3003`; // TODO Move to configuration
 
@@ -23,15 +22,15 @@ export class Effects {
     .ofType<AddGraph>(ADD_GRAPH)
     .concatMap(action =>
       this._http
-        .get(`${host}/logs/timeseries?${toStringRepresentation(action.logDbQuery)}`)
-        .map(logEntries => new GraphDataLoaded(action.logDbQuery, <LogEntry[]>logEntries, null))
-        .catch(errorResponse => Observable.of(new GraphDataLoaded(action.logDbQuery, null, errorResponse)))
+        .get(`${host}/logs/aggregate?p=${action.query}`)
+        .map(logEntries => new GraphDataLoaded(action.graphId, <LogEntry[]>logEntries, null))
+        .catch(errorResponse => Observable.of(new GraphDataLoaded(action.graphId, null, errorResponse)))
     );
 
   @Effect() graphDataLoaded$ = this._actions
     .ofType<GraphDataLoaded>(GRAPH_DATA_LOADED)
     .delay(300)
-    .map(action => new RedrawGraph(toStringRepresentation(action.logDbQuery)));
+    .map(action => new RedrawGraph(action.graphId));
 
   constructor(
     private _http: HttpClient,

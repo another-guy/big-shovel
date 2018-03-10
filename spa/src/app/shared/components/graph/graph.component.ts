@@ -16,7 +16,7 @@ import * as c3 from 'c3';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 
-import { AppState } from '../../../app.reducers';
+import { AppState } from '../../../app.store-state';
 import { GraphC3ConfigHelper } from '../../../shared/c3/config-helper';
 import { GraphOptions } from '../../../shared/models/graph-options';
 import { LogEntry } from '../../../shared/models/log-entry';
@@ -52,7 +52,7 @@ export class GraphComponent implements OnInit, OnDestroy {
     private _actions: Actions,
     private _viewContainerRef: ViewContainerRef,
   ) {
-    this.graphOptions$ = _store.select(state => state.buildTimeseries.allGraphOptions[this.graphId]);
+    this.graphOptions$ = _store.select(state => state.graph.options[this.graphId]);
 
     const data$ = _store.select(state => state.graph.logs[this.graphId]);
     this.logEntries$ = data$.map(loadedGraphData => loadedGraphData && loadedGraphData.logEntryList);
@@ -67,7 +67,7 @@ export class GraphComponent implements OnInit, OnDestroy {
         if (!logEntries || !graphOptions) return;
         this.plot(
           logEntries.map(logEntry => (
-            logEntry.time = logEntry.time.replace(' ', 'T'),   // TODO Fix that on logging side!!!
+            logEntry.time = logEntry.time && logEntry.time.replace(' ', 'T'),   // TODO Fix that on logging side!!!
             logEntry
           )),
           graphOptions,

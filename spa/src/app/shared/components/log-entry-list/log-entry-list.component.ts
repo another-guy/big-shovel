@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 
-import { AppState } from '../../../app.reducers';
+import { AppState } from '../../../app.store-state';
 import { LogEntry } from '../../models/log-entry';
 
 @Component({

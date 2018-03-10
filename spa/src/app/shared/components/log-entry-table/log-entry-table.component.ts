@@ -30,6 +30,6 @@ export class LogEntryTableComponent {
   }
 
   get haveRowsToShow(): boolean {
-    return this._list.length > 0;
+    return this._list && this._list.length > 0;
   }
 }

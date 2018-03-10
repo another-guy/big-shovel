@@ -2,9 +2,10 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 
-import { AppState } from '../../../app.reducers';
-import { IdGenerator } from '../../../shared/id-generator';
-import { AddAggregationPipelineGraph } from '../../../shared/store-actions';
+import { AppState } from '../../../app.store-state';
+import { LoadedLogEntryData } from '../../../graph.store-state';
+import { GraphOptions } from '../../../shared/models/graph-options';
+import { AddGraph } from '../../../shared/store-actions';
 
 @Component({
   selector: 'app-aggregation-pipeline',
@@ -22,27 +23,26 @@ export class AggregationPipelineComponent {
 ]`;
 
   aggregationPipeline: string;
-  private _id: string;
+  private _id: string = `builder`;
 
   error$: Observable<string>;
   list$: Observable<any[]>;
   listHeader$: Observable<string[]>;
+  options$: Observable<GraphOptions>; // TODO Use me!!!
   
   constructor (
     private _store: Store<AppState>,
-    private _idGenerator: IdGenerator,
   ) {
-    this._id = _idGenerator.nextString;
-
-    const aggregationPipeline$ = this._store.select(state => state.buildAggregationPipeline);
+    const graphLogs$ = this._store.select(state => state.graph.logs[this._id] || ({} as LoadedLogEntryData));
+    this.options$ = this._store.select(state => state.graph.options[this._id] || ({} as GraphOptions));
     
-    this.error$ = aggregationPipeline$.map(aggregationPipeline => aggregationPipeline.error);
-    this.list$ = aggregationPipeline$.map(aggregationPipeline => aggregationPipeline.logEntryList);
-    this.listHeader$ = this.list$.map(logEntryList => Object.getOwnPropertyNames(logEntryList.length > 0 ? logEntryList[0] : {}));
+    this.error$ = graphLogs$.map(state => state.error);
+    this.list$ = graphLogs$.map(state => state.logEntryList);
+    this.listHeader$ = this.list$.map(logEntryList => Object.getOwnPropertyNames(logEntryList && logEntryList.length > 0 ? logEntryList[0] : {}));
   }
 
   execute(): void {
-    this._store.dispatch(new AddAggregationPipelineGraph(this.aggregationPipeline, this._id));
+    this._store.dispatch(new AddGraph(this.aggregationPipeline, this._id));
   }
 
 }
