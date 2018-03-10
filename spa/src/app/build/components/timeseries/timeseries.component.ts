@@ -20,7 +20,7 @@ export class TimeseriesComponent {
   sortOptionsString: string;
   graphIdList$: Observable<string[]>;
 
-  private _id = `timeseries`;
+  graphId = `timeseries`;
 
   trackByGraphId(index: number, expression: string): string {
     return expression;
@@ -43,6 +43,6 @@ export class TimeseriesComponent {
   }
 
   addExpression(): void {
-    this.dispatch(new AddGraph(this.queryString, this._id));
+    this.dispatch(new AddGraph(this.queryString, this.graphId));
   }
 }

@@ -4,7 +4,10 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class DotsPipe implements PipeTransform {
 
   transform(value: string, lengthBeforeDots: number): any {
-    return `${value && value.substr(0, lengthBeforeDots)}...`;
+    const safeValue = value || '';
+    return safeValue.length <= lengthBeforeDots ?
+      safeValue :
+      `${safeValue.substr(0, lengthBeforeDots)}...`;
   }
 
 }

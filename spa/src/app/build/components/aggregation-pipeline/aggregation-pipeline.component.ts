@@ -23,7 +23,7 @@ export class AggregationPipelineComponent {
 ]`;
 
   aggregationPipeline: string;
-  private _id: string = `builder`;
+  graphId: string = `builder`;
 
   error$: Observable<string>;
   list$: Observable<any[]>;
@@ -33,8 +33,8 @@ export class AggregationPipelineComponent {
   constructor (
     private _store: Store<AppState>,
   ) {
-    const graphLogs$ = this._store.select(state => state.graph.logs[this._id] || ({} as LoadedLogEntryData));
-    this.options$ = this._store.select(state => state.graph.options[this._id] || ({} as GraphOptions));
+    const graphLogs$ = this._store.select(state => state.graph.logs[this.graphId] || ({} as LoadedLogEntryData));
+    this.options$ = this._store.select(state => state.graph.options[this.graphId] || ({} as GraphOptions));
     
     this.error$ = graphLogs$.map(state => state.error);
     this.list$ = graphLogs$.map(state => state.logEntryList);
@@ -42,7 +42,7 @@ export class AggregationPipelineComponent {
   }
 
   execute(): void {
-    this._store.dispatch(new AddGraph(this.aggregationPipeline, this._id));
+    this._store.dispatch(new AddGraph(this.aggregationPipeline, this.graphId));
   }
 
 }

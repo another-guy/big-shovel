@@ -17,7 +17,7 @@ import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 
 import { AppState } from '../../../app.store-state';
-import { GraphC3ConfigHelper } from '../../../shared/c3/config-helper';
+import { GraphC3ConfigHelper, XAxis, Data } from '../../../shared/c3/config-helper';
 import { GraphOptions } from '../../../shared/models/graph-options';
 import { LogEntry } from '../../../shared/models/log-entry';
 import { REDRAW_GRAPH, RedrawGraph, RemoveGraph } from '../../store-actions';
@@ -87,30 +87,54 @@ export class GraphComponent implements OnInit, OnDestroy {
   }
 
   private plot(logEntries: LogEntry[], graphOptions: GraphOptions): void {
+    const looksLikeTimeseries = logEntries[0].time != null; // TODO!!!
 
+    const { xAxis, data } = looksLikeTimeseries ?
+      this.timeSeriesXAxisAndData(logEntries, graphOptions) :
+      this.nonTimeSeriesXAxisAndData(logEntries, graphOptions);
+
+    c3.generate({
+      ...(new GraphC3ConfigHelper()).createConfig(graphOptions.chartType, xAxis, data),
+      bindto: this._viewContainerRef.element.nativeElement.querySelector('div.svg-container'),
+      size: this.svgSize,
+    });
+  }
+
+  private nonTimeSeriesXAxisAndData(logEntries: LogEntry[], graphOptions: GraphOptions): { xAxis: XAxis, data: Data } {
+    return {
+      xAxis: {
+        xTickList: logEntries.map(x => x._id),
+        metric: {
+          name: null,
+          xFormat: null,
+          xTickFormat: null,
+          getKey: null,
+        },
+        isTimeseries: false,
+      },
+      data: {
+        'ERRORS': { pointList: logEntries.map(x => ((<any>x).count || 0)), color: 'red' },
+      }
+    };
+  }
+
+  private timeSeriesXAxisAndData(logEntries: LogEntry[], graphOptions: GraphOptions) {
     const groupedByPeriod = this.groupByPeriod(logEntries, graphOptions.metricType.getKey);
     const periodKeyList = Object.getOwnPropertyNames(groupedByPeriod);
     const errors = periodKeyList.map(periodKey => groupedByPeriod[periodKey].filter(logEntry => logEntry.level === 'ERROR').length);
     const infos = periodKeyList.map(periodKey => groupedByPeriod[periodKey].filter(logEntry => logEntry.level === 'INFO').length);
 
-    const c3ConfigBase = new GraphC3ConfigHelper().createConfig(
-      graphOptions.chartType,
-      {
+    return {
+      xAxis: {
         xTickList: periodKeyList,
         metric: graphOptions.metricType,
         isTimeseries: true,
       },
-      {
+      data: {
         'INFOS': { pointList: infos, color: 'gray' },
         'ERRORS': { pointList: errors, color: 'red' },
-      },
-    );
-
-    c3.generate({
-      ...c3ConfigBase,
-      bindto: this._viewContainerRef.element.nativeElement.querySelector('div.svg-container'),
-      size: this.svgSize,
-    });
+      }
+    };
   }
 
   // TODO Unit test
@@ -119,9 +143,11 @@ export class GraphComponent implements OnInit, OnDestroy {
     logEntries: LogEntry[],
     getPeriodKey: (timestamp: string) => string,
   ): { [_: string]: LogEntry[] } {
-    return logEntries.reduce(
+    return logEntries
+      .filter(logEntry => logEntry.time != null)
+      .reduce(
         (subresult, logEntry) => {
-          const periodKey = getPeriodKey(logEntry.time);
+          const periodKey = getPeriodKey(logEntry.time); // TODO   GPR_FEAT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
           const periodLogEntries = subresult[periodKey];
           if (periodLogEntries) {
             periodLogEntries.push(logEntry);

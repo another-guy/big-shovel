@@ -21,13 +21,15 @@ export const CHART_TYPES = [
 export interface XAxis {
   metric: Metric,
   isTimeseries: boolean,
-  xTickList: (string | number)[],
+  xTickList: any[],
 }
 
 export interface DataSeries {
   pointList: number[];
   color: string;
 };
+
+export type Data = { [seriesName: string]: DataSeries };
 
 export class GraphC3ConfigHelper {
 
@@ -36,23 +38,34 @@ export class GraphC3ConfigHelper {
   createConfig(
     chartType: string,
     xAxis: XAxis,
-    dataSeries: { [seriesName: string]: DataSeries },
+    dataSeries: Data,
   ) {
     const seriesNameList = Object.getOwnPropertyNames(dataSeries);
-    const columns = [
-      [ 'x', ...xAxis.xTickList ],
-      ...seriesNameList.map(seriesName => [ seriesName, ...dataSeries[seriesName].pointList ]),
-    ];
+    
+    
+    const columns =
+      xAxis.isTimeseries ?
+        [
+          [ 'x', ...xAxis.xTickList ],
+          ...seriesNameList.map(seriesName => [ seriesName, ...dataSeries[seriesName].pointList ]),
+        ] :
+        [
+          ...seriesNameList.map(seriesName => [ seriesName, ...dataSeries[seriesName].pointList ])
+        ];
+
+
     const groups = [ seriesNameList ];
     const areaTypes = mapWithObject(seriesNameList, dataSeries, 'area');
     const areaSplineTypes = mapWithObject(seriesNameList, dataSeries, 'area-spline');
     const stepTypes = mapWithObject(seriesNameList, dataSeries, 'step');
     const colors = sliceObject(seriesNameList, dataSeries, 'color');
 
-    const commonData = {
-      x: 'x',
-      xFormat: xAxis.metric.xFormat,
-    };
+    const commonData = xAxis.isTimeseries ?
+      {
+        x: 'x',
+        xFormat: xAxis.metric.xFormat,
+      } :
+      { };
 
     const data: c3.Data = (() => {
       switch (chartType) {
@@ -67,16 +80,22 @@ export class GraphC3ConfigHelper {
       }
     })();
     
-    const axis: c3.Axis = {
-      x: {
-        tick: {
-          format: xAxis.metric.xTickFormat,
-        },
-      },
-    };
-    if (xAxis.isTimeseries) {
-      axis.x.type = 'timeseries';
-    }
+    const axis: c3.Axis =
+      xAxis.isTimeseries ?
+        {
+          x: {
+            type: 'timeseries',
+            tick: {
+              format: xAxis.metric.xTickFormat,
+            },
+          },
+        } :
+        {
+          x: {
+            type: 'category',
+            categories: xAxis.xTickList,
+          },
+        };
 
     const bar = { width: { ratio: 0.8 } };
     const zoom = { enabled: true };
