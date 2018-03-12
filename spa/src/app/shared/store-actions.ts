@@ -33,6 +33,7 @@ export class UpdateGraphOptions implements Action {
   constructor(
     public graphId: string,
     public options: GraphOptions,
+    public forceRedraw: boolean,
   ) { }
 }
 

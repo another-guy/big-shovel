@@ -41,9 +41,6 @@ export class GraphOptionsComponent {
   }
 
   dispatch(chartType: string, metricType: Metric): void {
-    this._store.dispatch(new UpdateGraphOptions(this.graphId, { chartType, metricType }));
-    if (this.autoRedrawGraph) {
-      this.requestRedrawGraph();
-    }
+    this._store.dispatch(new UpdateGraphOptions(this.graphId, { chartType, metricType }, this.autoRedrawGraph));
   }
 }

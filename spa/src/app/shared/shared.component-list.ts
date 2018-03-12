@@ -1,5 +1,8 @@
 import { ChartTypeSelectorComponent } from './components/chart-type-selector/chart-type-selector.component';
 import { ErrorChipComponent } from './components/error-chip/error-chip.component';
+import {
+  GraphOptionsEnquirerComponent,
+} from './components/graph-options-enquirer-component/graph-options-enquirer.component';
 import { GraphOptionsComponent } from './components/graph-options/graph-options.component';
 import { GraphComponent } from './components/graph/graph.component';
 import { HelpLinkComponent } from './components/help-link/help-link.component';
@@ -11,6 +14,7 @@ import { MetricTypeSelectorComponent } from './components/metric-type-selector/m
 export const SharedComponents = [
   ChartTypeSelectorComponent,
   ErrorChipComponent,
+  GraphOptionsEnquirerComponent,
   GraphOptionsComponent,
   GraphComponent,
   HelpLinkComponent,
@@ -18,4 +22,8 @@ export const SharedComponents = [
   LogEntryListComponent,
   LogEntryTableComponent,
   MetricTypeSelectorComponent,
+];
+
+export const DynamicallyCreatedComponents = [
+  GraphOptionsEnquirerComponent,
 ];

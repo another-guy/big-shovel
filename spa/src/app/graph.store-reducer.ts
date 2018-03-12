@@ -23,20 +23,20 @@ export function handleFailedGraphDataLoaded(currentState: GraphState, action: gl
     logEntryList: (existingLogEntryData && existingLogEntryData.logEntryList) || [],
   };
 
-  const options = { ...currentState.options };
-  options[action.graphId] = { chartType: 'line', metricType: hourlyMetric };
+  // const options = { ...currentState.options };
+  // options[action.graphId] = { chartType: 'line', metricType: hourlyMetric };
 
-  return { logs, options };
+  return { logs, options: currentState.options };
 }
 
 export function handleSuccessfulGraphDataLoaded(currentState: GraphState, action: global.GraphDataLoaded): GraphState {
   const logs = { ...currentState.logs };
   logs[action.graphId] = { error: null, logEntryList: action.data };
 
-  const options = { ...currentState.options };
-  options[action.graphId] = { chartType: 'line', metricType: hourlyMetric };
+  // const options = { ...currentState.options };
+  // options[action.graphId] = { chartType: 'line', metricType: hourlyMetric };
 
-  return { logs, options };
+  return { logs, options: currentState.options };
 }
 
 export function handleUpdateGraphOptions(currentState: GraphState, action: global.UpdateGraphOptions): GraphState {

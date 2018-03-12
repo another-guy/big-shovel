@@ -1,4 +1,5 @@
 import 'rxjs/add/operator/filter';
+import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/withLatestFrom';
 
 import {
@@ -10,7 +11,6 @@ import {
   ViewContainerRef,
   ViewEncapsulation,
 } from '@angular/core';
-import { MatDialog } from '@angular/material';
 import { Actions } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import * as c3 from 'c3';
@@ -21,7 +21,7 @@ import { AppState } from '../../../app.store-state';
 import { Data, GraphC3ConfigHelper, XAxis } from '../../../shared/c3/config-helper';
 import { GraphOptions } from '../../../shared/models/graph-options';
 import { LogEntry } from '../../../shared/models/log-entry';
-import { ENQUIRE_GRAPH_OPTIONS, EnquireGraphOptions, REDRAW_GRAPH, RedrawGraph, RemoveGraph } from '../../store-actions';
+import { REDRAW_GRAPH, RedrawGraph, RemoveGraph } from '../../store-actions';
 
 @Component({
   selector: 'app-graph',
@@ -47,23 +47,11 @@ export class GraphComponent implements OnInit, OnDestroy {
     .ofType<RedrawGraph>(REDRAW_GRAPH)
     .filter(action => action.graphId === this.graphId);
 
-  enquireGraphOptions$ = this._actions
-    .ofType<EnquireGraphOptions>(ENQUIRE_GRAPH_OPTIONS)
-    .subscribe(action => {
-      this._matDialog
-        .open(GraphOptionsEnquirerComponent<LogEntry[]>, action.data)
-        .afterClosed()
-        .subscribe(x => {
-          // TODO Dispatch "GraphOptionsCollected"
-        });
-    });
-
   private _plotSubscription: Subscription;
   constructor(
     private _store: Store<AppState>,
     private _actions: Actions,
     private _viewContainerRef: ViewContainerRef,
-    private _matDialog: MatDialog,
   ) {
     this.graphOptions$ = _store.select(state => state.graph.options[this.graphId]);
 
