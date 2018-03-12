@@ -6,9 +6,13 @@ export interface LoadedLogEntryData {
   error: string;
 }
 
+export type AllLogs = { [graphId: string]: LoadedLogEntryData };
+
+export type AllOptions = { [graphId: string]: GraphOptions };
+
 export interface GraphState {
-  logs: { [graphId: string]: LoadedLogEntryData };
-  options: { [graphId: string]: GraphOptions };
+  logs: AllLogs;
+  options: AllOptions;
 }
 
 export const initialState: GraphState = {

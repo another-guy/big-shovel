@@ -9,6 +9,7 @@ export const GRAPH_DATA_LOADED = 'graph-data-loaded';
 export const UPDATE_GRAPH_OPTIONS = 'update-graph-options';
 export const REMOVE_GRAPH = 'remove-graph';
 export const REDRAW_GRAPH = 'redraw-graph';
+export const ENQUIRE_GRAPH_OPTIONS = 'enquire-graph-options';
 
 export class AddGraph implements Action {
   readonly type = ADD_GRAPH;
@@ -49,9 +50,18 @@ export class RedrawGraph implements Action {
   ) { }
 }
 
+export class EnquireGraphOptions implements Action {
+  readonly type = ENQUIRE_GRAPH_OPTIONS;
+  constructor(
+    public graphId: string,
+    public data: LogEntry[],
+  ) { }
+}
+
 export type Actions =
   AddGraph |
   GraphDataLoaded |
   UpdateGraphOptions |
   RemoveGraph |
-  RedrawGraph;
+  RedrawGraph |
+  EnquireGraphOptions;
